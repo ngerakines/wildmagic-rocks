@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wildmagicrocks"
+authors = [
+    {name = "Nick Gerakines", email = "nick.gerakines@gmail.com"},
+]
+description = "A website that serves random wild magic effects."
+requires-python = ">=3.11"
+license = {text = "MIT"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "aiohttp==3.8.3",
+    "jinja2==3.1.2",
+    "aiohttp_jinja2==1.5"
+]
+dynamic = ["version"]
+
+[project.scripts]
+server = "wildmagicrocks.app:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["wildmagicrocks*"]
+exclude = ["wildmagicrocks.tests*"]
+namespaces = false
