@@ -3,6 +3,7 @@ import os
 import json
 from logging.config import dictConfig
 
+
 def configure_logging():
     logging_config_file = os.getenv("LOGGING_CONFIG_FILE", "")
 

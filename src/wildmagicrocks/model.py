@@ -1,139 +1,202 @@
-
-import random
 from typing import Any, List, Set, Dict, Optional
 from string import Formatter
 from enum import Flag, auto
+import numpy
 
 
-STATS =  ["Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"]
+STATS = ["Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"]
+
 
 class Tags(Flag):
     MINOR = auto()
     MODERATE = auto()
     MAJOR = auto()
 
-def random_duration(duration_range: Optional[int] = None) -> str:
+
+def random_duration(
+    rng: numpy.random.Generator, duration_range: Optional[int] = None
+) -> str:
     if duration_range is None:
-        duration_range = random.randint(1, 100)
+        duration_range = rng.integers(1, 100)
     plurality = ""
     if duration_range == 100:
-        days = random.randint(1, 7)
+        days = rng.integers(1, 7)
         if days > 1:
             plurality = "s"
         return f"{days} day{plurality}"
     elif duration_range > 50:
-        hours = random.choice([1,2,3,4,6,10,12,24])
+        hours = rng.choice([1, 2, 3, 4, 6, 10, 12, 24])
         if hours > 1:
             plurality = "s"
         return f"{hours} hour{plurality}"
-    minutes = random.choice([1,2,3,4,5,10,20,30,60])
+    minutes = rng.choice([1, 2, 3, 4, 5, 10, 20, 30, 60])
     if minutes > 1:
         plurality = "s"
     return f"{minutes} minute{plurality}"
 
-def random_target(suffix: Optional[str] = None) -> str:
-    target = random.choice(["you", "a random ally in your line of sight", "all allies in your line of sight", "you and your allies in your line of sight", "a random target in your line of sight", "you and all creatures in your line of sight", "all other creatures in your line of sight"])
+
+def random_target(rng: numpy.random.Generator, suffix: Optional[str] = None) -> str:
+    target = rng.choice(
+        [
+            "you",
+            "a random ally in your line of sight",
+            "all allies in your line of sight",
+            "you and your allies in your line of sight",
+            "a random target in your line of sight",
+            "you and all creatures in your line of sight",
+            "all other creatures in your line of sight",
+        ]
+    )
     if suffix is not None:
         return f"{target} {suffix}"
     return target
 
-def random_other_target(suffix: Optional[str] = None) -> str:
-    target = random.choice(["a random ally in your line of sight", "all allies in your line of sight", "a random target in your line of sight", "all other creatures in your line of sight"])
+
+def random_other_target(
+    rng: numpy.random.Generator, suffix: Optional[str] = None
+) -> str:
+    target = rng.choice(
+        [
+            "a random ally in your line of sight",
+            "all allies in your line of sight",
+            "a random target in your line of sight",
+            "all other creatures in your line of sight",
+        ]
+    )
     if suffix is not None:
         return f"{target} {suffix}"
     return target
+
 
 class Surge:
     def __init__(self, message: str, values: Dict[str, Any] = {}) -> None:
         self._message = message
         self._message_fields = [v[1] for v in Formatter().parse(self._message)]
-    
-    def render(self) -> str:
+
+    def render(self, rng: numpy.random.Generator) -> str:
         placeholders: Dict[str, str] = {}
         for message_field in self._message_fields:
             if message_field == "duration":
-                placeholders[message_field] = random_duration()
+                placeholders[message_field] = random_duration(rng)
             elif message_field == "duration_minutes":
-                placeholders[message_field] = random_duration(duration_range=1)
+                placeholders[message_field] = random_duration(rng, duration_range=1)
             elif message_field == "duration_hours":
-                placeholders[message_field] = random_duration(duration_range=51)
+                placeholders[message_field] = random_duration(rng, duration_range=51)
             elif message_field == "duration_days":
-                placeholders[message_field] = random_duration(duration_range=99)
+                placeholders[message_field] = random_duration(rng, duration_range=99)
             elif message_field == "change_direction":
-                placeholders[message_field] = random.choice(["increases", "decreases"])
+                placeholders[message_field] = rng.choice(["increases", "decreases"])
             elif message_field == "simple_color":
-                placeholders[message_field] = random.choice(["red", "green", "blue", "brown", "yellow", "purple"])
+                placeholders[message_field] = rng.choice(
+                    ["red", "green", "blue", "brown", "yellow", "purple"]
+                )
             elif message_field == "metal":
-                placeholders[message_field] = random.choice(["iron", "gold", "silver", "bronze", "copper", "steel"])
+                placeholders[message_field] = rng.choice(
+                    ["iron", "gold", "silver", "bronze", "copper", "steel"]
+                )
             elif message_field == "currency":
-                placeholders[message_field] = random.choice(["platinum", "gold", "silver"])
+                placeholders[message_field] = rng.choice(["platinum", "gold", "silver"])
             elif message_field == "element":
-                placeholders[message_field] = random.choice(["fire", "force"])
+                placeholders[message_field] = rng.choice(["fire", "force"])
             elif message_field == "damage_type":
-                placeholders[message_field] = random.choice(["acid", "bludgeoning", "cold", "fire", "force", "lightning", "necrotic", "piercing", "poison", "psychic", "radiant", "slashing", "thunder"])
+                placeholders[message_field] = rng.choice(
+                    [
+                        "acid",
+                        "bludgeoning",
+                        "cold",
+                        "fire",
+                        "force",
+                        "lightning",
+                        "necrotic",
+                        "piercing",
+                        "poison",
+                        "psychic",
+                        "radiant",
+                        "slashing",
+                        "thunder",
+                    ]
+                )
             elif message_field == "sense":
-                placeholders[message_field] = random.choice(["hear", "see", "taste", "smell"])
+                placeholders[message_field] = rng.choice(
+                    ["hear", "see", "taste", "smell"]
+                )
             elif message_field == "dice_type":
-                placeholders[message_field] = random.choice([2,4,6,8,10,12,20])
+                placeholders[message_field] = rng.choice([2, 4, 6, 8, 10, 12, 20])
             elif message_field == "lose_gain":
-                placeholders[message_field] = random.choice(["lose", "gain"])
+                placeholders[message_field] = rng.choice(["lose", "gain"])
             elif message_field == "one_all":
-                placeholders[message_field] = random.choice(["one", "all"])
+                placeholders[message_field] = rng.choice(["one", "all"])
             elif message_field == "fives_25":
-                placeholders[message_field] = random.choice([5,10,15,20,25])
+                placeholders[message_field] = rng.choice([5, 10, 15, 20, 25])
             elif message_field == "stat":
-                placeholders[message_field] = random.choice(STATS)
+                placeholders[message_field] = rng.choice(STATS)
             elif message_field == "low_spell_level":
-                placeholders[message_field] = random.choice(["1st", "2nd", "3rd", "4th", "5th"])
+                placeholders[message_field] = rng.choice(
+                    ["1st", "2nd", "3rd", "4th", "5th"]
+                )
             elif message_field == "ones_5":
-                placeholders[message_field] = random.randint(1, 5)
+                placeholders[message_field] = rng.integers(1, 5)
             elif message_field == "ones_10":
-                placeholders[message_field] = random.randint(1, 10)
+                placeholders[message_field] = rng.integers(1, 10)
             elif message_field == "createure_type":
-                placeholders[message_field] = random.choice(["aberrations", "beasts", "celestials", "elementals", "fey", "fiends", "plants", "undead"])
+                placeholders[message_field] = rng.choice(
+                    [
+                        "aberrations",
+                        "beasts",
+                        "celestials",
+                        "elementals",
+                        "fey",
+                        "fiends",
+                        "plants",
+                        "undead",
+                    ]
+                )
             elif message_field == "gain_target":
-                placeholders[message_field] = random_target("gains")
+                placeholders[message_field] = random_target(rng, "gains")
             elif message_field == "target":
-                placeholders[message_field] = random_target()
+                placeholders[message_field] = random_target(rng)
             elif message_field == "other_target":
-                placeholders[message_field] = random_other_target()
+                placeholders[message_field] = random_other_target(rng)
         return Formatter().format(self._message, **placeholders)
 
-class TempStatChangeSurge():
+
+class TempStatChangeSurge:
     def __init__(self) -> None:
         self._message = "Your {stat} {change_direction} by {amount} for {duration}."
         self._message_fields = [v[1] for v in Formatter().parse(self._message)]
 
-    def render(self) -> str:
+    def render(self, rng: numpy.random.Generator) -> str:
         return self._message.format(
-            stat = random.choice(STATS),
-            change_direction = random.choice(["increases", "decreases"]),
-            amount = random.choice([1,2]),
-            duration=random_duration(duration_range=99)
+            stat=rng.choice(STATS),
+            change_direction=rng.choice(["increases", "decreases"]),
+            amount=rng.choice([1, 2]),
+            duration=random_duration(rng, duration_range=99),
         )
 
-class PermStatChangeSurge():
+
+class PermStatChangeSurge:
     def __init__(self) -> None:
         self._message = "Your {stat} {change_direction} by {amount} permanently"
         self._message_fields = [v[1] for v in Formatter().parse(self._message)]
 
-    def render(self) -> str:
+    def render(self, rng: numpy.random.Generator) -> str:
         return self._message.format(
-            stat = random.choice(STATS),
-            change_direction = random.choice(["increases", "decreases"]),
-            amount = random.choice([1,2]),
+            stat=rng.choice(STATS),
+            change_direction=rng.choice(["increases", "decreases"]),
+            amount=rng.choice([1, 2]),
         )
 
-class ProtectedFromSurge():
+
+class ProtectedFromSurge:
     def __init__(self) -> None:
         self._message = "You are protected from {createure_type} for {duration}. Such creatures cannot attack you or harm you unless they save a Charisma saving throw against your spell save DC."
         self._message_fields = [v[1] for v in Formatter().parse(self._message)]
 
-    def render(self) -> str:
+    def render(self, rng: numpy.random.Generator) -> str:
         return self._message.format(
-            stat = random.choice(STATS),
-            change_direction = random.choice(["increases", "decreases"]),
-            amount = random.choice([1,2]),
+            stat=rng.choice(STATS),
+            change_direction=rng.choice(["increases", "decreases"]),
+            amount=rng.choice([1, 2]),
         )
 
 
@@ -141,9 +204,13 @@ SURGES = [
     # Wealth
     Surge("{ones_5}d{dice_type} {currency} pieces appear near you."),
     Surge("3d{dice_type} random gems appear near you, worth 50gp each."),
-    Surge("A 30-foot cube hypnotic pattern appears with you at the center. All creatures within the pattern must succeed on a Wisdom saving throw or fall asleep for 1 minute or until they take damage."),
+    Surge(
+        "A 30-foot cube hypnotic pattern appears with you at the center. All creatures within the pattern must succeed on a Wisdom saving throw or fall asleep for 1 minute or until they take damage."
+    ),
     Surge("The cast Fireball with your"),
-    Surge("A fireball explodes with you at the center. You and each creature within 20 feet of you who must make a Dexterity saving throw using your spell save DC, taking 5d6 fire damage on a failed save, or half as much damage on a successful one."),
+    Surge(
+        "A fireball explodes with you at the center. You and each creature within 20 feet of you who must make a Dexterity saving throw using your spell save DC, taking 5d6 fire damage on a failed save, or half as much damage on a successful one."
+    ),
     # Surge("A gentle gust of wind blows outward from you. All creatures within 40 feet of you can feel it, but it otherwise does nothing."),
     # Surge("A loud boom emanates from you. All creatures within 15 feet take 2d8 thunder damage and must make a Constitution saving throw against your spell save DC or be deafened for 1 minute."),
     # Surge("A magic mouth appears on a nearby wall or flat surface. When you speak, your voice comes from the magic mouth. This lasts for 1 minute."),
@@ -250,34 +317,48 @@ SURGES = [
     # Surge("Up to three creatures you choose within 30 feet of you take 1d10 lightning damage equal to your level."),
     # Surge("Within the next hour, you have advantage on the next roll you make where you don't already have advantage."),
     # Surge("You add your proficiency bonus to all Charisma checks for the next hour, if you don't already add it."),
-    Surge("{gain_target} vulnerability to {damage_type} damage for {duration_minutes}."),
-
-    Surge("You are at the center of a 10-foot radius antimagic field that negates all magic equal to or less than your level for {duration_hours} and does not require concentration."),
+    Surge(
+        "{gain_target} vulnerability to {damage_type} damage for {duration_minutes}."
+    ),
+    Surge(
+        "You are at the center of a 10-foot radius antimagic field that negates all magic equal to or less than your level for {duration_hours} and does not require concentration."
+    ),
     # Surge("You are at the center of a darkness spell for 1 minute."),
     # Surge("You are at the center of a fog cloud spell which lasts for 1 minute."),
     # Surge("You are confused for 1 minute, as though you were affected by the confusion spell."),
     # Surge("You are confused for 1 minute, as though you were affected by the confusion spell."),
     # Surge("You are immune to disease for 1 week."),
     # Surge("You are immune to intoxication for the next 5d6 days."),
-    Surge("You are protected from {createure_type} for {duration}. Such creatures cannot attack you or harm you unless they save a Charisma saving throw against your spell save DC."),
+    Surge(
+        "You are protected from {createure_type} for {duration}. Such creatures cannot attack you or harm you unless they save a Charisma saving throw against your spell save DC."
+    ),
     # Surge("You are resistant to all damage types for  4d6 + level hours (max 24)."),
     # Surge("You are surrounded by a faint, offensive odor for 1 minute. You gain disadvantage on all Charisma checks."),
     # Surge("You are surrounded by a faint, pleasant odor. You gain advantage on all Charisma checks you make within the next minute."),
     # Surge("You are surrounded by a horrible, noxious odor for 1 minute. Anyone within 10 feet of you must make a Constitution saving throw or be stunned."),
     # Surge("You are the center of a silence spell for 1 minute."),
-    Surge("You are vulnerable to {createure_type} for {duration}. Such creatures gain advantage when attacking you."),
+    Surge(
+        "You are vulnerable to {createure_type} for {duration}. Such creatures gain advantage when attacking you."
+    ),
     # Surge("You become intoxicated for 4d6 + level hours (max 24)."),
-
-    Surge("You die and after 30 seconds True Ressurection is immediately cast on you by an available diety of the player's choosing. "),
-    Surge("You emanate light in a 30-foot radius for {duration_minutes}. Any creature within 5 feet of you that can see is blinded until the end of its next."),
-    
+    Surge(
+        "You die and after 30 seconds True Ressurection is immediately cast on you by an available diety of the player's choosing. "
+    ),
+    Surge(
+        "You emanate light in a 30-foot radius for {duration_minutes}. Any creature within 5 feet of you that can see is blinded until the end of its next."
+    ),
     # Skills and proficiency
     Surge("You gain proficiency in all {stat} checks for the next hour"),
-    Surge("You gain proficiency in one skill of your choice that you're not already proficient in for {duration}."),
-    Surge("You gain proficiency in one tool or weapon type of your choice that you're not already proficient in for {duration}."),
-    Surge("You gain the ability to speak one additional language of your choice for {duration}."),
+    Surge(
+        "You gain proficiency in one skill of your choice that you're not already proficient in for {duration}."
+    ),
+    Surge(
+        "You gain proficiency in one tool or weapon type of your choice that you're not already proficient in for {duration}."
+    ),
+    Surge(
+        "You gain the ability to speak one additional language of your choice for {duration}."
+    ),
     Surge("You loose the ability to speak a random language you know for {duration}."),
-
     # Spell effects and abilities
     Surge("{gain_target} the ability to speak with animals for {duration}."),
     Surge("{gain_target} the ability to walk on water for {duration}."),
@@ -289,35 +370,45 @@ SURGES = [
     Surge("{gain_target} the effect of Confusion for {duration_minutes}."),
     Surge("{gain_target} the effect of Shield for {duration}."),
     Surge("{gain_target} the effect of Silence for {duration_minutes}."),
-    Surge("{gain_target} the effect of Invisibility and Silence for {duration_minutes}. The effect ends for a target that attacks, or casts a spell."),
+    Surge(
+        "{gain_target} the effect of Invisibility and Silence for {duration_minutes}. The effect ends for a target that attacks, or casts a spell."
+    ),
     Surge("{gain_target} the effect of Freedom of Movement for {duration}."),
-    Surge("{gain_target} the effect of Blindsight with a radius of 60 feet for {duration}."),
-    Surge("{gain_target} the effect of Darkvision with a radius of 60 feet for {duration}."),
+    Surge(
+        "{gain_target} the effect of Blindsight with a radius of 60 feet for {duration}."
+    ),
+    Surge(
+        "{gain_target} the effect of Darkvision with a radius of 60 feet for {duration}."
+    ),
     Surge("{gain_target} the effect of Fly for {duration}."),
     Surge("{gain_target} the effect of Feather Fall for {duration}."),
     Surge("{gain_target} the effect of Levitate for {duration}."),
     Surge("{gain_target} the effect of Mirror Image for {duration}."),
-    Surge("{gain_target} the service of a {low_spell_level}-level spirital weapon for {duration_minutes}."),
+    Surge(
+        "{gain_target} the service of a {low_spell_level}-level spirital weapon for {duration_minutes}."
+    ),
     Surge("{gain_target} the service of a phantom steed for {duration}."),
     Surge("{gain_target} the service of an arcane eye for {duration}."),
     Surge("{gain_target} the service of an arcane sword for {duration}."),
     Surge("{gain_target} the service of an unseen servant for {duration}."),
-    Surge("{gain_target} the effect of tremorsense with a range of 30 feet for {duration}."),
-
+    Surge(
+        "{gain_target} the effect of tremorsense with a range of 30 feet for {duration}."
+    ),
     # Senses
     Surge("You lose the ability to {sense} for {duration}."),
-    Surge("You permanently lose the ability to {sense}. This sense can be restored with a spell that removes curses such as remove curse."),
-
+    Surge(
+        "You permanently lose the ability to {sense}. This sense can be restored with a spell that removes curses such as remove curse."
+    ),
     # Skill rolls
     Surge("You lose proficiency in all skill rolls for {duration}."),
-    Surge("You {lose_gain} proficiency in one randomly chosen skill, tool, or weapon type for 2d6 days."),
-
+    Surge(
+        "You {lose_gain} proficiency in one randomly chosen skill, tool, or weapon type for 2d6 days."
+    ),
     # Combat
     Surge("You gain a -2 penalty to your AC for 1 minute."),
     Surge("You gain a +1 to your AC for one minute."),
     Surge("You gain a +2 bonus to your AC for 1 minute."),
     Surge("You get gain a -1 penalty to your AC for 1 minute."),
-
     # Health
     Surge("You immediately drop to 0 hit points."),
     Surge("You immediately drop to 1 hit point."),
@@ -328,78 +419,150 @@ SURGES = [
     Surge("You immediately heal 4d{dice_type} hit points."),
     Surge("You immediately heal {fives_25} hit points."),
     Surge("You immediately lose {one_all} unspent sorcery points."),
-    Surge("You immediately take 1d{dice_type} {damage_type} damage. This damage does not bring you below 1 hit point."),
-    Surge("You immediately take 2d{dice_type} {damage_type} damage. This damage does not bring you below 1 hit point."),
+    Surge(
+        "You immediately take 1d{dice_type} {damage_type} damage. This damage does not bring you below 1 hit point."
+    ),
+    Surge(
+        "You immediately take 2d{dice_type} {damage_type} damage. This damage does not bring you below 1 hit point."
+    ),
     Surge("You regain 5 hit points per round for {duration_minutes}."),
-
     # Time
-    Surge("You jump forward in time exactly 1 minute, for 1 minute. From the perspective of everyone else, you cease to exist during that time."),
-
+    Surge(
+        "You jump forward in time exactly 1 minute, for 1 minute. From the perspective of everyone else, you cease to exist during that time."
+    ),
     # Appearance and conditions
-    Surge("You {lose_gain} 1d6x4 percent of your weight. You gradually return to your original weight over the course of {duration}."),
-    Surge("You make no sounds for {duration_minutes} and you gain advantage on any Dexterity (Stealth) checks."),
-    Surge("Your height {change_direction} by 1d6 inches. You gradually return to your original height over the course of {duration}."),
-    Surge("You transform into an {metal} statue of yourself for {duration_minutes}, during which time you are considered petrified."),
-    Surge("You transform into an small-medium size inanimate object of the DM's choosing. During this time you are petrified. After {duration} you return to normal."),
+    Surge(
+        "You {lose_gain} 1d6x4 percent of your weight. You gradually return to your original weight over the course of {duration}."
+    ),
+    Surge(
+        "You make no sounds for {duration_minutes} and you gain advantage on any Dexterity (Stealth) checks."
+    ),
+    Surge(
+        "Your height {change_direction} by 1d6 inches. You gradually return to your original height over the course of {duration}."
+    ),
+    Surge(
+        "You transform into an {metal} statue of yourself for {duration_minutes}, during which time you are considered petrified."
+    ),
+    Surge(
+        "You transform into an small-medium size inanimate object of the DM's choosing. During this time you are petrified. After {duration} you return to normal."
+    ),
     Surge("Your eyes glow {simple_color} for {duration}."),
-    Surge("Your eyes permanently change color and are now {simple_color}. A spell such as remove curse can end this effect."),
-    Surge("Your feet sink into the ground, making you completely immobile for {duration_minutes}. This has no effect if you were not standing on the ground when the spell was cast."),
-    Surge("Your fingernails and toenails grow to an uncomfortable length. Until you trim them, your Dexterity is reduced by 1 and your speed is reduced by 5 feet."),
-    Surge("Your fingers become sore for {duration}. During this time, you must succeed on a Dexterity saving throw against your spell save DC to cast a spell with a somatic component."),
-    Surge("Your skin permanently darkens as if you have a tan, or if you are already dark-skinned, your skin becomes one shade lighter. A spell such as remove curse can end this effect."),
-    Surge("Your clothes become dirty and filthy. Until you can change and/or clean your clothes, your Charisma is reduced by 1."),
-    Surge("You grow 1d{dice_type} inches in height. You gradually return to your original height over the course of {duration}."),
+    Surge(
+        "Your eyes permanently change color and are now {simple_color}. A spell such as remove curse can end this effect."
+    ),
+    Surge(
+        "Your feet sink into the ground, making you completely immobile for {duration_minutes}. This has no effect if you were not standing on the ground when the spell was cast."
+    ),
+    Surge(
+        "Your fingernails and toenails grow to an uncomfortable length. Until you trim them, your Dexterity is reduced by 1 and your speed is reduced by 5 feet."
+    ),
+    Surge(
+        "Your fingers become sore for {duration}. During this time, you must succeed on a Dexterity saving throw against your spell save DC to cast a spell with a somatic component."
+    ),
+    Surge(
+        "Your skin permanently darkens as if you have a tan, or if you are already dark-skinned, your skin becomes one shade lighter. A spell such as remove curse can end this effect."
+    ),
+    Surge(
+        "Your clothes become dirty and filthy. Until you can change and/or clean your clothes, your Charisma is reduced by 1."
+    ),
+    Surge(
+        "You grow 1d{dice_type} inches in height. You gradually return to your original height over the course of {duration}."
+    ),
     Surge("You grow a beard made of feathers, which remains until you sneeze."),
-    Surge("Your spell components seem to have been rearranged. For {duration_minutes}, you must make an Intelligence check against your spell save DC to cast any spell that requires a material component."),
-    Surge("You have a momentary vision of your own death. If you fail a Wisdom saving roll at your spell DC, you are frightened for {duration_minutes}."),
-    Surge("You have the irresistible urge to scratch an itch in the middle your back, just out of reach, for {duration_minutes}. If you don't scratch it using a back scratcher or some similar device , you must succeed a Constitution saving throw against your spell save DC to cast a spell."),
-    Surge("You hear a ringing in your ears for {duration_minutes}. During this time, casting a spell that requires a verbal component requires a Constitution check against your spell save DC."),
-    Surge("A bad joke comes to mind and until you tell it (which takes an entire action), you suffer a Wisdom penalty of 1."),
-    Surge("You can hear exceptionally well for {duration_minutes}, gaining advantage for all Perception checks related to sound."),
-    Surge("You can smell exceptionally well for {duration_minutes}, gaining blindsight with a radius of 10 feet and advantage on all Perception checks related to odor."),
-    Surge("You fall victim to a horrible cramp in both legs, reducing your speed by 10 feet for {duration_minutes}."),
-    Surge("You feel extremely nauseated. Make a Constitution saving throw against your spell save DC. If you fail, you must spend your next action throwing up."),
-    Surge("For the next day, each time you say a word with the 's' sound, it sounds like a hissing snake."),
-    Surge("You can't speak for {duration_minutes}. When you try, pink bubbles float out of your mouth."),
-    Surge("For the next {duration_hours}, your skin tone changes color every 30 minutes, cycling through the colors of the rainbow."),
-
+    Surge(
+        "Your spell components seem to have been rearranged. For {duration_minutes}, you must make an Intelligence check against your spell save DC to cast any spell that requires a material component."
+    ),
+    Surge(
+        "You have a momentary vision of your own death. If you fail a Wisdom saving roll at your spell DC, you are frightened for {duration_minutes}."
+    ),
+    Surge(
+        "You have the irresistible urge to scratch an itch in the middle your back, just out of reach, for {duration_minutes}. If you don't scratch it using a back scratcher or some similar device , you must succeed a Constitution saving throw against your spell save DC to cast a spell."
+    ),
+    Surge(
+        "You hear a ringing in your ears for {duration_minutes}. During this time, casting a spell that requires a verbal component requires a Constitution check against your spell save DC."
+    ),
+    Surge(
+        "A bad joke comes to mind and until you tell it (which takes an entire action), you suffer a Wisdom penalty of 1."
+    ),
+    Surge(
+        "You can hear exceptionally well for {duration_minutes}, gaining advantage for all Perception checks related to sound."
+    ),
+    Surge(
+        "You can smell exceptionally well for {duration_minutes}, gaining blindsight with a radius of 10 feet and advantage on all Perception checks related to odor."
+    ),
+    Surge(
+        "You fall victim to a horrible cramp in both legs, reducing your speed by 10 feet for {duration_minutes}."
+    ),
+    Surge(
+        "You feel extremely nauseated. Make a Constitution saving throw against your spell save DC. If you fail, you must spend your next action throwing up."
+    ),
+    Surge(
+        "For the next day, each time you say a word with the 's' sound, it sounds like a hissing snake."
+    ),
+    Surge(
+        "You can't speak for {duration_minutes}. When you try, pink bubbles float out of your mouth."
+    ),
+    Surge(
+        "For the next {duration_hours}, your skin tone changes color every 30 minutes, cycling through the colors of the rainbow."
+    ),
     # Spell slots and casting
-    Surge("You permanently forget one cantrip. A spell such as remove curse can restore your memory."),
-    Surge("You permanently gain one 1st-level spell slot but forget one cantrip that you already know. A spell such as remove curse can end this effect."),
-    Surge("You permanently gain one cantrip. A spell such as remove curse can end this effect."),
-    Surge("You permanently gain one spell slot of one level below your highest-level spell slot, but lose one 1st-level spell slot. A spell such as remove curse can end this effect."),
+    Surge(
+        "You permanently forget one cantrip. A spell such as remove curse can restore your memory."
+    ),
+    Surge(
+        "You permanently gain one 1st-level spell slot but forget one cantrip that you already know. A spell such as remove curse can end this effect."
+    ),
+    Surge(
+        "You permanently gain one cantrip. A spell such as remove curse can end this effect."
+    ),
+    Surge(
+        "You permanently gain one spell slot of one level below your highest-level spell slot, but lose one 1st-level spell slot. A spell such as remove curse can end this effect."
+    ),
     Surge("You recover 1 expended spell slot of your choice."),
     Surge("You recover all your expended spell slots."),
     Surge("You recover your lowest-level expended spell slot."),
     Surge("You regain all expended sorcery points."),
     Surge("You gain two spell slots at your second-highest level for 1 week."),
     Surge("You gain an additional spell slot of your highest level for 1 week."),
-    Surge("The next single target spell you cast within the next minute must target one additional target."),
-    Surge("The next spell you cast within the hour uses a slot level one level higher than what it normally requires."),
-    Surge("The next spell you cast within the next hour uses a spell slot of one level lower than what it normally requires. If the spell is a spell of 1st level, you still must expend a spell slot to cast it."),
-    Surge("The next spell you cast within the next minute that does damage, the damage is maximized."),
+    Surge(
+        "The next single target spell you cast within the next minute must target one additional target."
+    ),
+    Surge(
+        "The next spell you cast within the hour uses a slot level one level higher than what it normally requires."
+    ),
+    Surge(
+        "The next spell you cast within the next hour uses a spell slot of one level lower than what it normally requires. If the spell is a spell of 1st level, you still must expend a spell slot to cast it."
+    ),
+    Surge(
+        "The next spell you cast within the next minute that does damage, the damage is maximized."
+    ),
     Surge("The next time you cast a spell, do not roll on this chart."),
-    Surge("The next time you cast a spell, roll twice on this chart. Both effects will apply."),
-
+    Surge(
+        "The next time you cast a spell, roll twice on this chart. Both effects will apply."
+    ),
     # Actions
     Surge("You may immediately take 1 additional action."),
-
-    Surge("You stand at the center a circular wall of {element} with a radius of 15 feet. Any creature in any of the spaces covered by this wall must make a Dexterity saving throw against your spell DC or take 5d8 {element} damage. The wall remains for {duration_minutes}."),
-
+    Surge(
+        "You stand at the center a circular wall of {element} with a radius of 15 feet. Any creature in any of the spaces covered by this wall must make a Dexterity saving throw against your spell DC or take 5d8 {element} damage. The wall remains for {duration_minutes}."
+    ),
     # Movement and teleportation
-    Surge("You teleport to an alternate plane, then return to the location where you started after 1 minute."),
+    Surge(
+        "You teleport to an alternate plane, then return to the location where you started after 1 minute."
+    ),
     Surge("You teleport up to 60 feet to an unoccupied space that you can see."),
     Surge("Your speed {change_direction} by 10 feet for {duration}."),
-
     # Misc
-    Surge("You're feeling lucky. Any time you make an ability check, roll 1d{dice_type} and add the result. This lasts {duration}."),
-    
+    Surge(
+        "You're feeling lucky. Any time you make an ability check, roll 1d{dice_type} and add the result. This lasts {duration}."
+    ),
     TempStatChangeSurge(),
     PermStatChangeSurge(),
 ]
 
+
 def random_event() -> str:
     pass
+
 
 if __name__ == "__main__":
     for surge in SURGES:
