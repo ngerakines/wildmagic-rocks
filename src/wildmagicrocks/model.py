@@ -472,4 +472,11 @@ def random_surges(rng: numpy.random.Generator, count: int = 5) -> List[Tuple[str
         attempts += 1
         surges.add(rng.choice(SURGES))
 
-    return [(surge.render(rng), repr(surge)) for surge in sorted(surges, key=lambda x: hash(x))]
+    return [(surge.render(rng).capitalize(), repr(surge)) for surge in sorted(surges, key=lambda x: hash(x))]
+
+
+def find_surge(rng: numpy.random.Generator, surge_id: str) -> Optional[Tuple[str, str]]:
+    for surge in SURGES:
+        if repr(surge) == surge_id:
+            return surge.render(rng).capitalize(), repr(surge)
+    return None

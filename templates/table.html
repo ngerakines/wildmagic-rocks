@@ -1,7 +1,46 @@
-<html>
-    <body>
-        <ol>
-            {% for surge in surges -%}<li>{{ surge[0] }} <small>{{ surge[1] }}</small></li>{%- endfor %}
-        </ol>
-    </body>
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/css/pico.css">
+    <title>Wild Magic Rocks!</title>
+</head>
+
+<body>
+    <nav class="container-fluid">
+        <ul>
+            <li><strong>Wild Magic Rocks!</strong></li>
+        </ul>
+        <ul>
+            <li><a href="/">Surge Generator</a></li>
+            <li><a href="/table">Surge Table Generator</a></li>
+            <li><a href="/help">Help</a></li>
+        </ul>
+    </nav>
+    <main class="container-fluid">
+        <p>
+            <a href="/table" role="button">Generate</a> <a href="/table?seed={{ seed }}" role="button"
+                class="secondary">Permalink</a>
+        </p>
+        <table role="grid">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Surge</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for surge in surges -%}
+                <tr>
+                    <th scope="row">{{loop.index}}</th>
+                    <td>{{ surge[0] }}</td>
+                </tr>
+                {%- endfor %}
+            </tbody>
+        </table>
+    </main>
+</body>
+
 </html>
