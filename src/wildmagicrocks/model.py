@@ -1,7 +1,8 @@
-from typing import Any, List, Set, Dict, Optional
+from typing import Any, List, Set, Dict, Optional, Tuple
 from string import Formatter
 from enum import Flag, auto
 import numpy
+from fnvhash import fnv1a_64
 
 
 STATS = ["Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"]
@@ -78,6 +79,17 @@ class Surge:
         self._message = message
         self._message_fields = [v[1] for v in Formatter().parse(self._message)]
 
+    def __hash__(self):
+        return fnv1a_64(self._message.encode("utf8"))
+
+    def __eq__(self, other):
+        if isinstance(other, Surge):
+            return self._message == other._message
+        return NotImplemented
+
+    def __repr__(self) -> str:
+        return hex(self.__hash__())
+
     def render(self, rng: numpy.random.Generator) -> str:
         placeholders: Dict[str, str] = {}
         for message_field in self._message_fields:
@@ -123,14 +135,24 @@ class Surge:
                 placeholders[message_field] = rng.choice([2, 4, 6, 8, 10, 12, 20])
             elif message_field == "lose_gain":
                 placeholders[message_field] = rng.choice(["lose", "gain"])
+            elif message_field == "allies_enemies":
+                placeholders[message_field] = rng.choice(["allies", "enemies"])
+            elif message_field == "allies_creatures_enemies":
+                placeholders[message_field] = rng.choice(["allies", "creatures", "enemies"])
             elif message_field == "one_all":
                 placeholders[message_field] = rng.choice(["one", "all"])
             elif message_field == "fives_25":
                 placeholders[message_field] = rng.choice([5, 10, 15, 20, 25])
+            elif message_field == "tens_20":
+                placeholders[message_field] = rng.choice([10, 20])
+            elif message_field == "tens_30":
+                placeholders[message_field] = rng.choice([10, 20, 30])
             elif message_field == "stat":
                 placeholders[message_field] = rng.choice(STATS)
             elif message_field == "low_spell_level":
                 placeholders[message_field] = rng.choice(["1st", "2nd", "3rd", "4th", "5th"])
+            elif message_field == "ones_2":
+                placeholders[message_field] = rng.integers(1, 2)
             elif message_field == "ones_5":
                 placeholders[message_field] = rng.integers(1, 5)
             elif message_field == "ones_10":
@@ -141,9 +163,15 @@ class Surge:
                         "aberrations",
                         "beasts",
                         "celestials",
+                        "constructs",
+                        "dragons",
                         "elementals",
                         "fey",
                         "fiends",
+                        "giants",
+                        "humanoids",
+                        "monstrosities",
+                        "oozes",
                         "plants",
                         "undead",
                     ]
@@ -186,26 +214,13 @@ class PermStatChangeSurge:
         )
 
 
-class ProtectedFromSurge:
-    def __init__(self) -> None:
-        self._message = "You are protected from {createure_type} for {duration}. Such creatures cannot attack you or harm you unless they save a Charisma saving throw against your spell save DC."
-        self._message_fields = [v[1] for v in Formatter().parse(self._message)]
-
-    def render(self, rng: numpy.random.Generator) -> str:
-        return self._message.format(
-            stat=rng.choice(STATS),
-            change_direction=rng.choice(["increases", "decreases"]),
-            amount=rng.choice([1, 2]),
-        )
-
-
 SURGES = [
     # Wealth
     Surge("{ones_5}d{dice_type} {currency} pieces appear near you."),
     Surge("3d{dice_type} random gems appear near you, worth 50gp each."),
     Surge("A 30-foot cube hypnotic pattern appears with you at the center. All creatures within the pattern must succeed on a Wisdom saving throw or fall asleep for 1 minute or until they take damage."),
     Surge(
-        "A fireball explodes with you at the center. You and each creature within 20 feet of you who must make a Dexterity saving throw using your spell save DC, taking 5d6 fire damage on a failed save, or half as much damage on a successful one."
+        "A fireball explodes with you at the center. You and each creature within 20 feet must make a Dexterity saving throw using your spell save DC, taking 5d6 fire damage on a failed save, or half as much damage on a successful one."
     ),
     Surge("A gentle gust of wind blows outward from you. All creatures within 40 feet of you can feel it, but it otherwise does nothing."),
     Surge("A loud boom emanates from you. All creatures within 15 feet take 2d8 thunder damage and must make a Constitution saving throw against your spell save DC or be deafened for {duration_minutes}."),
@@ -213,56 +228,42 @@ SURGES = [
     Surge("A puddle of grease appears where you are standing, with a 10-foot radius. You and anyone within 10 feet of you must make a Dexterity check at your spell save DC or fall prone."),
     Surge("A random creature within 60 feet of you is poisoned for {duration_hours}."),
     Surge("A third eye appears in your forehead, giving you advantage on sight-based Wisdom (Perception) checks for 1 minute."),
-    # Surge("All allies within 20 feet of you gain a -2 penalty to attack and damage rolls for any ranged attack they make within the next minute."),
-    # Surge("All allies within 20 feet of you gain a +2 bonus to attack and damage rolls on any melee weapon attack they make within the next minute."),
-    # Surge("All allies within 20 feet of you gain a +2 bonus to attack and damage rolls on any ranged weapon attack they make within the next minute."),
-    # Surge("All allies within 20 feet of you get gain a -2 penalty on attack and damage rolls for any melee attack they make in the next minute."),
-    # Surge("All allies within 20 feet of you heal up to 3d8 hit points."),
-    # Surge("All allies within 30 feet of you gain a -2 penalty to their AC for 1 minute."),
-    # Surge("All creatures that can perceive you must make a Wisdom saving throw against your spell save DC or be frightened of you."),
-    # Surge("All creatures within 20 feet of you are knocked prone."),
-    # Surge("All creatures within 20 feet of you must make a Strength saving throw against your spell save DC or be knocked prone."),
-    # Surge("All creatures within 20 feet of you, including you, must make a Dexterity save against your spell save DC or be affected by a faerie fire spell."),
-    # Surge("All creatures within 30 feet of you must make a Wisdom saving throw. Any creature immune to magical sleep automatically succeeds on its saving throw. Those that fail fall asleep for 1d6 minutes."),
-    # Surge("All creatures within 60 feet of you regain 2d8 hit points."),
+    Surge("All {allies_creatures_enemies} within your line of sight {lose_gain} {ones_2} to attack and damage rolls for any ranged attack they make within the next {duration_minutes}."),
+    Surge("All {allies_creatures_enemies} within {tens_30} feet of you {lose_gain} {ones_2} to attack and damage rolls for any ranged attack they make within the next {duration_minutes}."),
+    Surge("All {allies_creatures_enemies} within your line of sight {lose_gain} {ones_2} to attack and damage rolls for any melee attack they make within the next {duration_minutes}."),
+    Surge("All {allies_creatures_enemies} within {tens_30} feet of you {lose_gain} {ones_2} to attack and damage rolls for any melee attack they make within the next {duration_minutes}."),
+    Surge("All {allies_creatures_enemies} within your line of sight heal up to {ones_5}d{dice_type} hit points."),
+    Surge("All {allies_creatures_enemies} within {tens_30} feet of you heal up to {ones_5}d{dice_type} hit points."),
+    Surge("All {allies_creatures_enemies} within your line of sight must make a Wisdom saving throw against your spell save DC or be frightened of you."),
+    Surge("All {allies_creatures_enemies} within {tens_30} feet of you must make a Wisdom saving throw against your spell save DC or be frightened of you."),
+    Surge("All {allies_creatures_enemies} within your line of sight must make a Strength saving throw against your spell save DC or be knocked prone."),
+    Surge("All {allies_creatures_enemies} within {tens_30} feet of you must make a Strength saving throw against your spell save DC or be knocked prone."),
     Surge("All of your non-magical clothing and equipment teleports to the nearest open space at least 15 feet from you that you can see."),
-    # Surge("All spells you cast within the next minute automatically fail."),
-    # Surge("All your allies within 20 feet of you gain a +2 bonus to their AC for 1 minute."),
-    # Surge("An extra-planar being of your alignment whose CR is equal to your level appears near you. Make a Charisma saving throw against your spell save DC. If you make it, the demon is subservient, otherwise, it is hostile. The demon, if not banished or defeated, vanishes after 1 day."),
-    # Surge("An imp appears near you. Make a Charisma saving throw against your spell save DC. If you succeed, the imp is subservient, otherwise, it is hostile. The imp, if not banished or defeated, vanishes after 1 hour."),
-    # Surge("An imp appears within 30 feet of you. Make a Charisma saving throw against your spell save DC. If you succeed it, the imp is subservient, otherwise, it is hostile. The imp, if not banished or defeated, vanishes after 1 day."),
-    # Surge("Approximately 100 gallons of water appear over your head and those within 10 feet of you, evenly distributed above everybody within the radius."),
-    # Surge("Choose 1 permanent or triggered effect that has happened to you or somebody else that you’ve received from this chart and remove it, even if it was beneficial."),
-    # Surge("During the next hour, you may re-roll any one save, attack roll, or skill check. If you do, you must take the new roll’s result."),
-    # Surge("Each creature within 30 feet of you takes 1d10 necrotic damage. You regain hit points equal to the sum of damage dealt."),
-    # Surge("Every creature within 15 feet of you takes 1 necrotic damage. If you are wounded, you regain hit points up to the amount of damage dealt. If you are not wounded, you gain this amount of temporary hit points."),
-    # Surge("Every inanimate object that isn't being worn or carried within 40 feet of you becomes enshrouded with shadows for 1 minute. Enshrouded objects are considered heavily obscured."),
-    # Surge("For 1 minute, a duplicate of yourself appears in the nearest open space which can take actions independently, and goes on the same Initiative as you. However, any damage it takes as well as any spell slots or sorcery point it uses applies to you as well."),
-    # Surge("For 1 minute, any flammable item you touch, that you aren't already wearing or carrying, bursts into flame."),
-    # Surge("For 1 minute, one creature of your choice within 30 feet of you gains a -1 penalty to attack rolls, damage rolls, and their AC."),
-    # Surge("For 1 minute, you gain resistance to nonmagical bludgeoning, piercing, and slashing damage."),
-    # Surge("For 2d6 days, you glow bright yellow. You have disadvantage on Stealth checks and anyone trying to perceive you has advantage on their Perception check."),
-    # Surge("For 2d6 hours, you have a faint pink glow. Anyone trying to perceive you has advantage on their Perception check."),
-    # Surge("For any spell that requires a saving throw you cast within the next minute, the target gains advantage."),
-    # Surge("For one minute, any spell with a casting time of 1 action can be cast as a bonus action."),
-    # Surge("For one minute, every creature you touch Petrified as if you cast it. No concentration is required."),
-    # Surge("For the next day, any time you make an ability check, roll 1d6 and add the result."),
-    # Surge("For the next day, any time you make an ability check, roll 1d6 and subtract the result."),
-    # Surge("For the next day, everything you say must rhyme. If it doesn’t, you take 1d6 psychic damage."),
-    # Surge("For the next day, you are in the Border Ethereal near the location you were last in."),
-    # Surge("For the next day, you gain proficiency in all skills that you are not already proficient in."),
-    # Surge("For the next day, you have advantage on the next 2d6 rolls you make where you don't already have advantage."),
-    # Surge("For the next hour, any time you make an ability check, roll 1d4 and add the result."),
-    # Surge("For the next hour, any time you make an ability check, roll 1d4 and subtract the result."),
-    # Surge("For the next hour, any time you make an ability check, roll 1d6 and subtract the result."),
-    # Surge("For the next hour, you appear to others to be the opposite gender."),
-    # Surge("For the next hour, you are unable to read as the letters all appeared jumbled."),
-    # Surge("For the next hour, you gain advantage on Charisma checks when dealing with any creature wearing black, but disadvantage if they are wearing white. If they are wearing both, this doesn't apply."),
-    # Surge("For the next hour, you gain advantage on Charisma checks when dealing with any creature wearing red, but disadvantage if they are wearing green. If they are wearing both, this doesn't apply."),
-    # Surge("For the next minute, all melee attacks you make with a non-magical weapon gain a +1 bonus to hit and to damage, and are considered magical for the purpose of overcoming resistances."),
-    # Surge("For the next minute, all spells with a casting time of 1 action or 1 bonus action require 2 consecutive actions to cast."),
-    Surge("For the next minute, any creature you touch takes 1d{dice_type} lightning damage."),
-    # Surge("For the next minute, every creature within 60 feet of you that hears you speak only hears insults as if you are casting vicious mockery at first level."),
+    Surge("All spells that {allies_creatures_enemies} cast within the next minute automatically fail."),
+    Surge(
+        "An creature of your CR of the DM's choosing appears within {tens_30} feet of you. Make a Charisma saving throw against your spell save DC. If you succeed it, the creature is subservient, otherwise, it is hostile. The creature, if not banished or defeated, vanishes after {duration_days}."
+    ),
+    Surge("Choose 1 permanent or triggered effect that has happened to you or somebody else that you've received from a wild magic surge and remove it, even if it was beneficial."),
+    Surge("During the next hour, you may re-roll any one save, attack roll, or skill check. If you do, you must take the new roll's result."),
+    Surge("All {allies_creatures_enemies} within your line of sight takes {ones_5}d{dice_type} necrotic damage. You regain hit points equal to the sum of damage dealt."),
+    Surge("Every inanimate object that isn't being worn or carried within 40 feet of you becomes enshrouded with shadows for 1 minute. Enshrouded objects are considered heavily obscured."),
+    Surge(
+        "A duplicate of yourself appears in the nearest open space which can take actions independently, and goes on the same Initiative as you. However, any damage it takes as well as any spell slots or sorcery point it uses applies to you as well. This lasts {duration_minutes}."
+    ),
+    Surge("Any flammable item you touch, that you aren't already wearing or carrying, bursts into flame. This lasts {duration_minutes}."),
+    Surge("{gain_target} a {ones_2} penalty to attack rolls, damage rolls, and their AC."),
+    Surge("You glow bright {simple_color}. You have disadvantage on Stealth checks and anyone trying to perceive you has advantage on their Perception check. This lasts {duration_hours}."),
+    Surge("You have a faint {simple_color} glow. Anyone trying to perceive you has advantage on their Perception check. This lasts {duration_hours}."),
+    Surge("The next spell that you cast within {duration_minutes} that requires a saving throw, the target gains advantage."),
+    Surge("The next spell that you cast within {duration_minutes} with a casting time of 1 action can be cast as a bonus action."),
+    Surge("The next ability check that you make within {duration_hours}, roll 1d{dice_type} and add the result."),
+    Surge("The next ability check that you make within {duration_hours}, roll 1d{dice_type} and subtract the result."),
+    Surge("you are unable to read as the letters all appeared jumbled. This effect lasts {duration}."),
+    Surge("You gain advantage on {stat} checks when dealing with any creature wearing {simple_color}, but disadvantage if they are wearing not."),
+    Surge("All attacks you make with a non-magical weapon gain a +1 bonus to hit and to damage, and are considered magical for the purpose of overcoming resistances. This lasts {duration}."),
+    Surge("All spells with a casting time of 1 action or 1 bonus action require 2 consecutive actions to cast. This lasts {duration}."),
+    Surge("Any creature you touch takes 1d{dice_type} lightning damage. This lasts {duration}."),
+    Surge("Every creature within {tens_30} feet of you that hears you speak only hears insults as if you are casting vicious mockery at first level. This lasts {duration}."),
     Surge("You are unable to cast any spell that causes damage of any type. This effect lasts {duration}."),
     Surge("You can pass through any solid, non-magical wall that is 6 or fewer inches thick. This effect lasts {duration}."),
     Surge("You can teleport up to 20 feet as part of your movement on each of your turns, for {duration_minutes}."),
@@ -276,6 +277,7 @@ SURGES = [
     Surge("If you cast a spell with a saving throw within the next minute, the target gains disadvantage on its saving throw."),
     Surge("Illusory butterflies and flower petals flutter in the air around you in a 10-foot radius for {duration}."),
     Surge("{target} must Constitution saving throw against your spell save DC. If you fail, they are stunned for {duration_minutes}."),
+    Surge("You are transformed into a different gender (if possible) of your current creature type, as if by the polymorph spell."),
     Surge("Make a Wisdom saving throw against your spell save DC. If you fail, you are transformed into a beast of your CR from your current plane for {duration_minutes}, as if by the polymorph spell."),
     Surge("Make a Wisdom saving throw against your spell save DC. If you fail, you are transformed into a non-intelligent small-medium size creature for {duration_minutes}, as if by the polymorph spell."),
     Surge("Make a Wisdom saving throw against your spell save DC. If you fail, you are transformed into a sheep for {duration_minutes}, as if by the polymorph spell."),
@@ -316,6 +318,8 @@ SURGES = [
     Surge("You are immune to intoxication for {duration_days}."),
     Surge("You are protected from {createure_type} for {duration}. Such creatures cannot attack you or harm you unless they save a Charisma saving throw against your spell save DC."),
     Surge("You are vulnerable to {createure_type} for {duration}. Such creatures gain advantage when attacking you."),
+    Surge("You gain advantage against all {createure_type} for {duration}."),
+    Surge("You gain advantage against all {damage_type} damage for {duration}."),
     Surge("You become intoxicated for {duration_hours}."),
     Surge("You die and after 30 seconds True Ressurection is immediately cast on you by an available diety of the player's choosing. "),
     Surge("You emanate light in a 30-foot radius for {duration_minutes}. Any creature within 5 feet of you that can see is blinded until the end of its next."),
@@ -462,3 +466,18 @@ SURGES = [
     TempStatChangeSurge(),
     PermStatChangeSurge(),
 ]
+
+
+def random_surges(rng: numpy.random.Generator, count: int = 5) -> List[Tuple[str, str]]:
+    if count < 5:
+        count = 20
+    if count > 100:
+        count = 100
+
+    surges: Set[Surge] = set()
+    attempts = 0
+    while attempts < count * 2 and len(surges) < count:
+        attempts += 1
+        surges.add(rng.choice(SURGES))
+
+    return [(surge.render(rng), repr(surge)) for surge in sorted(surges, key=lambda x: hash(x))]

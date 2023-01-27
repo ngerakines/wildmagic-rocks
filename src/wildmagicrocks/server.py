@@ -6,7 +6,7 @@ from aiohttp import web
 import aiohttp_jinja2
 import numpy as np
 
-from wildmagicrocks.model import SURGES
+from wildmagicrocks.model import random_surges
 
 
 logger = logging.getLogger(__name__)
@@ -26,28 +26,16 @@ def int_or(value: Optional[Union[str, int]], default_value: int) -> int:
 
 async def handle_index(request):
     rng = np.random.default_rng()
-    surge = rng.choice(SURGES)
-    the_surge = surge.render(rng)
-    return aiohttp_jinja2.render_template("index.html", request, context={"surge": the_surge})
+    surges = random_surges(rng)
+    return aiohttp_jinja2.render_template("index.html", request, context={"surge": surges[0]})
 
 
 async def handle_table(request):
     rng = np.random.default_rng()
 
     count = int_or(request.query.get("count"), 20)
+    surges = random_surges(rng, count)
 
-    if count is None:
-        count = 20
-    if count < 5:
-        count = 20
-    if count > 100:
-        count = 100
-
-    surges: Set[str] = set()
-    attempts = 0
-    while attempts < count * 2 and len(surges) < count:
-        attempts += 1
-        surges.add(rng.choice(SURGES).render(rng).capitalize())
     return aiohttp_jinja2.render_template("table.html", request, context={"surges": surges})
 
 

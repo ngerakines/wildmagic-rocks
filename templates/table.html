@@ -1,7 +1,7 @@
 <html>
     <body>
         <ol>
-            {% for surge in surges -%}<li>{{ surge }} </li>{%- endfor %}
+            {% for surge in surges -%}<li>{{ surge[0] }} <small>{{ surge[1] }}</small></li>{%- endfor %}
         </ol>
     </body>
 </html>
