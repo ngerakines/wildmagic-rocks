@@ -21,9 +21,9 @@
     </nav>
     <main class="container-fluid">
         <p>
-            <a href="/table?count={{ count }}&selected={{ selected }}" role="button">Generate</a> 
+            <a href="/table?count={{ count }}" role="button">Generate</a> 
             <a href="/table?seed={{ seed }}&count={{ count }}&selected={{ selected }}" role="button" class="secondary">Permalink</a>
-            <a href="/table?seed={{ seed }}&count={{ count }}&selected=-1" role="button" class="secondary">Select</a>
+            <a href="/table?seed={{ seed }}&count={{ count }}&selected=-1" role="button" class="secondary">Select Random</a>
         </p>
         <table role="grid">
             <thead>
@@ -35,8 +35,13 @@
             <tbody>
                 {% for surge in surges -%}
                 <tr>
-                    <th scope="row">{{loop.index}}</th>
-                    <td>{% if loop.index == selected %}<mark>{% endif %}{{ surge[0] }}{% if loop.index == selected %}</mark>{% endif %}</td>
+                    <th scope="row">
+                        <a href="/table?seed={{ seed }}&count={{ count }}&selected={{loop.index}}">{{loop.index}}</a>
+                    </th>
+                    <td>
+                        {% if loop.index == selected %}<mark>{% endif %}{{ surge[0] }}{% if loop.index == selected %}</mark>{% endif %}
+                        <a href="/surge/{{ surge[1] }}?seed={{ seed }}">Permalink</a>
+                    </td>
                 </tr>
                 {%- endfor %}
             </tbody>

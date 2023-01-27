@@ -77,7 +77,7 @@ def random_beneficial_target(rng: numpy.random.Generator, suffix: Optional[str] 
 class Surge:
     def __init__(self, message: str, values: Dict[str, Any] = {}) -> None:
         self._message = message
-        self._message_fields = [v[1] for v in Formatter().parse(self._message)]
+        self._message_fields = sorted(list(filter(None, set([v[1] for v in Formatter().parse(self._message)]))))
 
     def __hash__(self):
         return fnv1a_64(self._message.encode("utf8"))
@@ -90,9 +90,11 @@ class Surge:
     def __repr__(self) -> str:
         return hex(self.__hash__())
 
-    def render(self, rng: numpy.random.Generator) -> str:
+    def render(self, seed: int) -> str:
+
         placeholders: Dict[str, str] = {}
         for message_field in self._message_fields:
+            rng = numpy.random.default_rng(seed)
             if message_field == "duration":
                 placeholders[message_field] = random_duration(rng)
             elif message_field == "duration_minutes":
@@ -188,7 +190,8 @@ class Surge:
 
 
 class TempStatChangeSurge(Surge):
-    def render(self, rng: numpy.random.Generator) -> str:
+    def render(self, seed: int) -> str:
+        rng = numpy.random.default_rng(seed)
         return self._message.format(
             stat=rng.choice(STATS),
             change_direction=rng.choice(["increases", "decreases"]),
@@ -198,7 +201,8 @@ class TempStatChangeSurge(Surge):
 
 
 class PermStatChangeSurge((Surge)):
-    def render(self, rng: numpy.random.Generator) -> str:
+    def render(self, seed: int) -> str:
+        rng = numpy.random.default_rng(seed)
         return self._message.format(
             stat=rng.choice(STATS),
             change_direction=rng.choice(["increases", "decreases"]),
@@ -460,25 +464,26 @@ SURGES = [
 ]
 
 
-def random_surges(rng: numpy.random.Generator, count: int = 5) -> List[Tuple[str, str]]:
+def random_surges(seed: int, count: int = 5) -> List[Tuple[str, str]]:
     if count < 5:
         count = 20
     if count > 100:
         count = 100
 
+    rng = numpy.random.default_rng(seed)
     surges: Set[Surge] = set()
     attempts = 0
     while attempts < count * 2 and len(surges) < count:
         attempts += 1
         surges.add(rng.choice(SURGES))
 
-    return [(surge.render(rng).capitalize(), repr(surge)) for surge in sorted(surges, key=lambda x: hash(x))]
+    return [(surge.render(seed).capitalize(), repr(surge)) for surge in sorted(surges, key=lambda x: hash(x))]
 
 
-def find_surge(rng: numpy.random.Generator, surge_id: str, raw: bool = False) -> Optional[Tuple[str, str]]:
+def find_surge(seed: int, surge_id: str, raw: bool = False) -> Optional[Tuple[str, str]]:
     for surge in SURGES:
         if repr(surge) == surge_id:
             if raw:
                 return surge._message, repr(surge)
-            return surge.render(rng).capitalize(), repr(surge)
+            return surge.render(seed).capitalize(), repr(surge)
     return None

@@ -28,10 +28,8 @@ async def handle_index(request):
     seed: Optional[int] = int_or(request.query.get("seed"), None)
     if seed is None:
         seed = np.random.randint(1, 9223372036854775807)
-    rng = np.random.default_rng(seed)
 
-    print(rng.bit_generator.state)
-    surges = random_surges(rng)
+    surges = random_surges(seed)
     return aiohttp_jinja2.render_template("index.html", request, context={"surge": surges[0], "seed": seed})
 
 
@@ -39,7 +37,6 @@ async def handle_table(request):
     seed: Optional[int] = int_or(request.query.get("seed"), None)
     if seed is None:
         seed = np.random.randint(1, 9223372036854775807)
-    rng = np.random.default_rng(seed)
     count = int_or(request.query.get("count"), 20)
     selected = int_or(request.query.get("selected"), 0)
 
@@ -49,7 +46,7 @@ async def handle_table(request):
         selected = select_rng.integers(1, count)
         raise web.HTTPFound(f"/table?seed={seed}&count={count}&selected={selected}")
 
-    surges = random_surges(rng, count)
+    surges = random_surges(seed, count)
     if selected > len(surges):
         selected = 0
 
@@ -60,11 +57,10 @@ async def handle_surge(request):
     seed: Optional[int] = int_or(request.query.get("seed"), None)
     if seed is None:
         seed = np.random.randint(1, 9223372036854775807)
-    rng = np.random.default_rng(seed)
 
     raw = str(request.query.get("raw")).lower().startswith("t")
 
-    surge = find_surge(rng, request.match_info["surge_id"], raw=raw)
+    surge = find_surge(seed, request.match_info["surge_id"], raw=raw)
     if surge is None:
         raise web.HTTPNotFound()
     return aiohttp_jinja2.render_template("surge.html", request, context={"surge": surge, "seed": seed})
