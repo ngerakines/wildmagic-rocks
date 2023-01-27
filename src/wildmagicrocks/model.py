@@ -187,11 +187,7 @@ class Surge:
         return Formatter().format(self._message, **placeholders)
 
 
-class TempStatChangeSurge:
-    def __init__(self) -> None:
-        self._message = "Your {stat} {change_direction} by {amount} for {duration}."
-        self._message_fields = [v[1] for v in Formatter().parse(self._message)]
-
+class TempStatChangeSurge(Surge):
     def render(self, rng: numpy.random.Generator) -> str:
         return self._message.format(
             stat=rng.choice(STATS),
@@ -201,11 +197,7 @@ class TempStatChangeSurge:
         )
 
 
-class PermStatChangeSurge:
-    def __init__(self) -> None:
-        self._message = "Your {stat} {change_direction} by {amount} permanently"
-        self._message_fields = [v[1] for v in Formatter().parse(self._message)]
-
+class PermStatChangeSurge((Surge)):
     def render(self, rng: numpy.random.Generator) -> str:
         return self._message.format(
             stat=rng.choice(STATS),
@@ -463,8 +455,8 @@ SURGES = [
     Surge("Your speed {change_direction} by 10 feet for {duration}."),
     # Misc
     Surge("You're feeling lucky. Any time you make an ability check, roll 1d{dice_type} and add the result. This lasts {duration}."),
-    TempStatChangeSurge(),
-    PermStatChangeSurge(),
+    PermStatChangeSurge("Your {stat} {change_direction} by {amount} permanently"),
+    TempStatChangeSurge("Your {stat} {change_direction} by {amount} for {duration}."),
 ]
 
 
