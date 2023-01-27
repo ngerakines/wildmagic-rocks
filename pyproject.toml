@@ -29,3 +29,6 @@ where = ["src"]
 include = ["wildmagicrocks*"]
 exclude = ["wildmagicrocks.tests*"]
 namespaces = false
+
+[tool.black]
+line-length = 210

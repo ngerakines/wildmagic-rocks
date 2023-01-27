@@ -28,9 +28,7 @@ async def handle_index(request):
     rng = np.random.default_rng()
     surge = rng.choice(SURGES)
     the_surge = surge.render(rng)
-    return aiohttp_jinja2.render_template(
-        "index.html", request, context={"surge": the_surge}
-    )
+    return aiohttp_jinja2.render_template("index.html", request, context={"surge": the_surge})
 
 
 async def handle_table(request):
@@ -50,9 +48,7 @@ async def handle_table(request):
     while attempts < count * 2 and len(surges) < count:
         attempts += 1
         surges.add(rng.choice(SURGES).render(rng).capitalize())
-    return aiohttp_jinja2.render_template(
-        "table.html", request, context={"surges": surges}
-    )
+    return aiohttp_jinja2.render_template("table.html", request, context={"surges": surges})
 
 
 def template_location() -> str:
