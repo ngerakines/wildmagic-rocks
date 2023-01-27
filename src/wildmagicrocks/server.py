@@ -62,7 +62,9 @@ async def handle_surge(request):
         seed = np.random.randint(1, 9223372036854775807)
     rng = np.random.default_rng(seed)
 
-    surge = find_surge(rng, request.match_info["surge_id"])
+    raw = str(request.query.get("raw")).lower().startswith("t")
+
+    surge = find_surge(rng, request.match_info["surge_id"], raw=raw)
     if surge is None:
         raise web.HTTPNotFound()
     return aiohttp_jinja2.render_template("surge.html", request, context={"surge": surge, "seed": seed})
