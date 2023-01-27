@@ -40,11 +40,20 @@ async def handle_table(request):
     if seed is None:
         seed = np.random.randint(1, 9223372036854775807)
     rng = np.random.default_rng(seed)
-
     count = int_or(request.query.get("count"), 20)
-    surges = random_surges(rng, count)
+    selected = int_or(request.query.get("selected"), 0)
 
-    return aiohttp_jinja2.render_template("table.html", request, context={"surges": surges, "seed": seed})
+    print(f"selected {selected}")
+    if selected == -1:
+        select_rng = np.random.default_rng()
+        selected = select_rng.integers(1, count)
+        raise web.HTTPFound(f"/table?seed={seed}&count={count}&selected={selected}")
+
+    surges = random_surges(rng, count)
+    if selected > len(surges):
+        selected = 0
+
+    return aiohttp_jinja2.render_template("table.html", request, context={"surges": surges, "seed": seed, "selected": selected, "count": count})
 
 
 async def handle_surge(request):
@@ -57,6 +66,10 @@ async def handle_surge(request):
     if surge is None:
         raise web.HTTPNotFound()
     return aiohttp_jinja2.render_template("surge.html", request, context={"surge": surge, "seed": seed})
+
+
+async def handle_help(request):
+    return aiohttp_jinja2.render_template("help.html", request, context={})
 
 
 def template_location() -> str:
@@ -74,6 +87,7 @@ async def start_web_server():
     app.add_routes([web.get("/", handle_index)])
     app.add_routes([web.get("/table", handle_table)])
     app.add_routes([web.get("/surge/{surge_id}", handle_surge)])
+    app.add_routes([web.get("/help", handle_help)])
 
     aiohttp_jinja2.setup(app, loader=jinja2.FileSystemLoader(template_location()))
 
