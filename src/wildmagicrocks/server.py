@@ -29,7 +29,7 @@ def get_seed(request) -> int:
 
 
 def query_globals(request) -> Dict[str, Any]:
-    result: Dict[str, Any] = {"globals": {}}
+    result: Dict[str, Any] = {"globals": {}, "light_url": request.url.with_query({"light": "t"}), "dark_url": request.url.with_query({"dark": "t"})}
     mode = get_mode(request)
     if mode is not None:
         result["color_scheme"] = mode
