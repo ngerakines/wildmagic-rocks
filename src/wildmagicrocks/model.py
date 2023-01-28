@@ -3,7 +3,6 @@ from string import Formatter
 from enum import Flag, auto
 import numpy
 from fnvhash import fnv1a_64
-import spacy
 
 from wildmagicrocks.util import RecursiveFormatter
 
@@ -244,8 +243,6 @@ class Surge:
 
 class SurgeIndex:
     def __init__(self, surge_sources: List[str]) -> None:
-        self.nlp = spacy.load("en_core_web_md")
-
         self._surges: Dict[str, Surge] = {}
 
         for source in surge_sources:
@@ -270,7 +267,7 @@ class SurgeIndex:
             surge_id = rng.choice(surge_ids)
             surges.add(self._surges[surge_id])
 
-        return [(self.scrub(surge.render(seed)), repr(surge)) for surge in sorted(surges, key=lambda x: hash(x))]
+        return [(surge.render(seed).capitalize(), repr(surge)) for surge in sorted(surges, key=lambda x: hash(x))]
 
     def find_surge(self, seed: int, surge_id: str, raw: bool = False) -> Optional[Tuple[str, str]]:
         surge: Optional[Surge] = self._surges.get(surge_id, None)
@@ -278,11 +275,4 @@ class SurgeIndex:
             return None
         if raw:
             return surge._message, repr(surge)
-        return self.scrub(surge.render(seed)), repr(surge)
-
-    def scrub(self, content: str) -> str:
-        doc = self.nlp(content)
-        content: List[str] = []
-        for sentance in list(doc.sents):
-            content.append(str(sentance).capitalize())
-        return " ".join(content)
+        return surge.render(seed).capitalize(), repr(surge)

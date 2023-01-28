@@ -5,8 +5,6 @@ import jinja2
 from aiohttp import web
 import aiohttp_jinja2
 import numpy as np
-import spacy
-import lemminflect
 
 from wildmagicrocks.model import SurgeIndex, random_target
 
