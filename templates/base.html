@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en" {%- if color_scheme %} data-theme="{{ color_scheme }}"{%- endif %}>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark" />
+    <link rel="stylesheet" href="{{ static('css/pico.css') }}">
+    <title>Wild Magic Rocks!</title>
+</head>
+
+<body>
+    <nav class="container-fluid">
+        <ul>
+            <li><strong>Wild Magic Rocks!</strong></li>
+        </ul>
+        <ul>
+            <li><a href="{{ url('surge') }}">Surge Generator</a></li>
+            <li><a href="{{ url('surge_table') }}">Surge Table Generator</a></li>
+            <li><a href="{{ url('help') }}">Help</a></li>
+        </ul>
+    </nav>
+    <main class="container-fluid">{% block content %}{% endblock %}</main>
+</body>
+
+</html>
