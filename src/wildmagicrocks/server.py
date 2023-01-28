@@ -1,15 +1,40 @@
 import os
 import logging
-from typing import List, Optional, Set, Union
+from typing import Any, Dict, List, Optional, Set, Union
 import jinja2
 from aiohttp import web
 import aiohttp_jinja2
-import numpy as np
+import numpy
 
 from wildmagicrocks.model import SurgeIndex, random_target
+from wildmagicrocks.util import url_with_globals
 
 
 logger = logging.getLogger(__name__)
+
+
+def get_mode(request) -> Optional[str]:
+    if "dark" in request.query:
+        return "dark"
+    elif "light" in request.query:
+        return "light"
+    return None
+
+
+def get_seed(request) -> int:
+    seed: Optional[int] = int_or(request.query.get("seed"), None)
+    if seed is None:
+        seed = numpy.random.randint(1, 9223372036854775807)
+    return seed
+
+
+def query_globals(request) -> Dict[str, Any]:
+    result: Dict[str, Any] = {"globals": {}}
+    mode = get_mode(request)
+    if mode is not None:
+        result["color_scheme"] = mode
+        result["globals"][mode] = "t"
+    return result
 
 
 def int_or(value: Optional[Union[str, int]], default_value: Optional[int]) -> Optional[int]:
@@ -23,52 +48,43 @@ def int_or(value: Optional[Union[str, int]], default_value: Optional[int]) -> Op
             return value
     return default_value
 
-def seed_or(request) -> int:
-    seed: Optional[int] = int_or(request.query.get("seed"), None)
-    if seed is None:
-        seed = np.random.randint(1, 9223372036854775807)
-    return seed
 
 async def handle_index(request):
-    seed = seed_or(request)
+    seed = get_seed(request)
+    global_query = query_globals(request)
     surges = request.config_dict["surge_index"].random_surges(seed)
-    return aiohttp_jinja2.render_template("index.html", request, context={"surge": surges[0], "seed": seed})
+    return await aiohttp_jinja2.render_template_async("index.html", request, context={"surge": surges[0], "seed": seed, **global_query})
 
 
 async def handle_table(request):
-    seed = seed_or(request)
+    seed = get_seed(request)
+    global_query = query_globals(request)
     count = int_or(request.query.get("count"), 20)
     selected = int_or(request.query.get("selected"), 0)
     if selected == -1:
-        select_rng = np.random.default_rng()
+        select_rng = numpy.random.default_rng()
         selected = select_rng.integers(1, count)
-        raise web.HTTPFound(f"/table?seed={seed}&count={count}&selected={selected}")
+        raise web.HTTPFound(request.app.router.get("surge_table").url_for().with_query({"seed": str(seed), "count": count, "selected": str(selected), **global_query["globals"]}))
     surges = request.config_dict["surge_index"].random_surges(seed, count)
     if selected > len(surges):
         selected = 0
-
-    return aiohttp_jinja2.render_template("table.html", request, context={"surges": surges, "seed": seed, "selected": selected, "count": count})
+    return await aiohttp_jinja2.render_template_async("table.html", request, context={"surges": surges, "seed": seed, "selected": selected, "count": count, **global_query})
 
 
 async def handle_surge(request):
-    seed = seed_or(request)
+    seed = get_seed(request)
+    global_query = query_globals(request)
+
     raw = str(request.query.get("raw")).lower().startswith("t")
     surge = request.config_dict["surge_index"].find_surge(seed, request.match_info["surge_id"], raw=raw)
     if surge is None:
         raise web.HTTPNotFound()
-    return aiohttp_jinja2.render_template("surge.html", request, context={"surge": surge, "seed": seed})
+    return await aiohttp_jinja2.render_template_async("surge.html", request, context={"surge": surge, "seed": seed, **global_query})
 
 
 async def handle_help(request):
-    return aiohttp_jinja2.render_template("help.html", request, context={})
-
-
-def template_location() -> str:
-    return os.path.join(os.getcwd(), "templates")
-
-
-def static_location() -> str:
-    return os.path.join(os.getcwd(), "static")
+    global_query = query_globals(request)
+    return await aiohttp_jinja2.render_template_async("help.html", request, context=global_query)
 
 
 async def start_web_server():
@@ -76,12 +92,20 @@ async def start_web_server():
 
     app["surge_index"] = SurgeIndex(surge_sources=[os.path.join(os.getcwd(), "surges.txt")])
 
-    app.add_routes([web.static("/static", static_location(), append_version=True)])
-    app.add_routes([web.get("/", handle_index)])
-    app.add_routes([web.get("/table", handle_table)])
-    app.add_routes([web.get("/surge/{surge_id}", handle_surge)])
-    app.add_routes([web.get("/help", handle_help)])
+    app.add_routes([web.static("/static", os.path.join(os.getcwd(), "static"), append_version=True)])
 
-    aiohttp_jinja2.setup(app, loader=jinja2.FileSystemLoader(template_location()))
+    app.add_routes([web.get("/", handle_index, name="surge")])
+    app.add_routes([web.get("/table", handle_table, name="surge_table")])
+    app.add_routes([web.get("/surge/{surge_id}", handle_surge, name="surge_info")])
+    app.add_routes([web.get("/help", handle_help, name="help")])
+
+    jinja_env = aiohttp_jinja2.setup(app, enable_async=True, loader=jinja2.FileSystemLoader(os.path.join(os.getcwd(), "templates")))
+    jinja_env.globals.update(
+        {
+            "url": url_with_globals,
+        }
+    )
+
+    app["static_root_url"] = "/static"
 
     return app

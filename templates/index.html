@@ -1,32 +1,9 @@
-<!doctype html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/static/css/pico.css">
-    <title>Wild Magic Rocks!</title>
-</head>
-
-<body>
-    <nav class="container-fluid">
-        <ul>
-            <li><strong>Wild Magic Rocks!</strong></li>
-        </ul>
-        <ul>
-            <li><a href="/">Surge Generator</a></li>
-            <li><a href="/table">Surge Table Generator</a></li>
-            <li><a href="/help">Help</a></li>
-        </ul>
-    </nav>
-    <main class="container-fluid">
-        <h3>{{ surge[0] }}</h3>
-        <p>
-            <a href="/" role="button">Generate</a> <a href="/surge/{{ surge[1] }}?seed={{ seed }}" role="button"
-                class="secondary">Permalink</a> <a href="/surge/{{ surge[1] }}" role="button"
-                class="contrast">Random</a>
-        </p>
-    </main>
-</body>
-
-</html>
+{%- extends "base.html" -%}
+{%- block content -%}
+<h3>{{ surge[0] }}</h3>
+<p>
+    <a href="{{ url('surge') }}" role="button">Generate</a> 
+    <a href="{{ url('surge_info', surge_id=surge[1], query_={'seed': seed}) }}" role="button" class="secondary">Permalink</a> 
+    <a href="{{ url('surge_info', surge_id=surge[1]) }}" role="button" class="contrast">Random</a>
+</p>
+{%- endblock -%}

@@ -1,4 +1,7 @@
 from string import Formatter
+from typing import Dict, Any, Optional
+
+import jinja2
 
 
 class RecursiveFormatter(Formatter):
@@ -40,3 +43,41 @@ class RecursiveFormatter(Formatter):
                 continue
             else:
                 return format_string
+
+
+from typing import Any, Dict, Optional, Union, TypedDict
+
+import jinja2
+from aiohttp import web
+from yarl import URL
+
+
+class _Context(TypedDict, total=False):
+    app: web.Application
+
+
+@jinja2.pass_context
+def url_with_globals(context: _Context, __route_name: str, query_: Optional[Dict[str, str]] = None, **parts: Union[str, int]) -> URL:
+    app = context["app"]
+
+    query: Dict[str, str] = {}
+    if "globals" in context:
+        query.update(context["globals"])
+    if query_ is not None:
+        query.update(query_)
+
+    parts_clean: Dict[str, str] = {}
+    for key in parts:
+        val = parts[key]
+        if isinstance(val, str):
+            val = str(val)
+        elif type(val) is int:
+            val = str(val)
+        else:
+            raise TypeError("argument value should be str or int, got {} -> [{}] {!r}".format(key, type(val), val))
+        parts_clean[key] = val
+
+    url = app.router[__route_name].url_for(**parts_clean)
+    if len(query) > 0:
+        url = url.with_query(query)
+    return url

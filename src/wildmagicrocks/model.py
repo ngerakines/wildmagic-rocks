@@ -241,6 +241,7 @@ class Surge:
         placeholders["target_scope_within_feet"] = target_scope_rng.choice([10, 20, 30])
         return RecursiveFormatter().format(self._message, **placeholders)
 
+
 class SurgeIndex:
     def __init__(self, surge_sources: List[str]) -> None:
         self._surges: Dict[str, Surge] = {}
