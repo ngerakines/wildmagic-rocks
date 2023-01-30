@@ -153,6 +153,8 @@ class Surge:
                 placeholders[message_field] = rng.choice(["platinum", "gold", "silver"])
             elif message_field == "element":
                 placeholders[message_field] = rng.choice(["fire", "force"])
+            elif message_field == "dragon_type":
+                placeholders[message_field] = rng.choice(["black", "blue", "brass", "bronze", "copper", "gold", "green", "red", "silver", "white"])
             elif message_field == "damage_type":
                 placeholders[message_field] = rng.choice(
                     [
@@ -169,6 +171,39 @@ class Surge:
                         "radiant",
                         "slashing",
                         "thunder",
+                    ]
+                )
+            # plane
+            elif message_field == "plane":
+                placeholders[message_field] = rng.choice(
+                    [
+                        "The Material Plane",
+                        "Feywild",
+                        "Shadowfell",
+                        "The Ethereal Plane",
+                        "The Astral Plane",
+                        "The Elemental Plane of Air",
+                        "The Elemental Plane of Fire",
+                        "The Elemental Plane of Earth",
+                        "The Elemental Plane of Water",
+                        "The Elemental Chaos",
+                        "Arcadia",
+                        "Mount Celestia",
+                        "Bytopia",
+                        "Elysium",
+                        "The Beastlands",
+                        "Arborea",
+                        "Ysgard",
+                        "Limbo",
+                        "Pandemonium",
+                        "The Abyss",
+                        "Carceri",
+                        "Hades",
+                        "Gehenna",
+                        "The Nine Hells",
+                        "Archeron",
+                        "Mechanus",
+                        "The City of Sigil",
                     ]
                 )
             elif message_field == "sense":

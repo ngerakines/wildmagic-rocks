@@ -57,7 +57,9 @@
 3d{dice_type} random gems appear near you, worth 50gp each.
 A 30-foot cube hypnotic pattern appears with you at the center. All creatures within the pattern must succeed on a Wisdom saving throw or fall asleep for 1 minute or until they take damage.
 A bad joke comes to mind and until you tell it (which takes an entire action), you suffer a Wisdom penalty of 1.
+A cat falls from above causing 1d4 bludgeoning damage to {single_target}.
 A chaotic nuetral goose with an intelligence of 6 appears from behind you and follows you around. It won't go away for {duration_hours}.
+A dog falls from above causing 1d4 bludgeoning damage to {single_target}.
 A duplicate of yourself appears in the nearest open space which can take actions independently, and goes on the same Initiative as you. However, any damage it takes as well as any spell slots or sorcery point it uses applies to you as well. This lasts {duration_minutes}.
 A fireball explodes with you at the center. You and each creature within 20 feet must make a Dexterity saving throw using your spell save DC, taking 5d6 fire damage on a failed save, or half as much damage on a successful one.
 A gentle gust of wind blows outward from you. All creatures within 40 feet of you can feel it, but it otherwise does nothing.
@@ -69,14 +71,18 @@ A random creature within 60 feet of you is poisoned for {duration_hours}.
 A rope in your position or with 10 feet of you is effected as if you cast Rope Trick for {duration_hours}.
 A third eye appears in your forehead, giving you advantage on sight-based Wisdom (Perception) checks for 1 minute.
 All {allies_creatures_enemies} within your line of sight takes {ones_5}d{dice_type} necrotic damage. You regain hit points equal to the sum of damage dealt.
+All alcoholic or intoxicating liquid within 30 feet becomes water.
 All attacks you make with a non-magical weapon gain a +1 bonus to hit and to damage, and are considered magical for the purpose of overcoming resistances. This lasts {duration_minutes}.
 All creatures within 10 feet of you take 5d{dice_type} {damage_type} damage distributed evenly
 All creatures within 30 feet of you take 10d{dice_type} {damage_type} damage distributed evenly
+All fires within 30 feet are now {simple_color} until extinguished.
+All fires witin 30 feet become extinguished. You gain 1d6 hit points for each 5 foot square put out.
 All non-magical food and drink is effected as if you cast Purify Food and Drink.
 All non-magical items within 10 feet are repaired as if you cast Mending.
 All of your non-magical clothing and equipment teleports to the nearest open space at least 15 feet from you that you can see.
 All spells that {target} cast within the next minute automatically fail.
 All spells with a casting time of 1 action or 1 bonus action require 2 consecutive actions to cast. This lasts {duration}.
+All water within 30 feet becomes common red wine.
 An creature of your CR of the DM's choosing appears within {tens_30} feet of you. Make a Charisma saving throw against your spell save DC. If you succeed it, the creature is subservient, otherwise, it is hostile. The creature, if not banished or defeated, vanishes after {duration_days}.
 Any creature you touch takes 1d{dice_type} lightning damage. This lasts {duration}.
 Any flammable item you touch, that you aren't already wearing or carrying, bursts into flame. This lasts {duration_minutes}.
@@ -84,6 +90,8 @@ Choose 1 permanent or triggered effect that has happened to you or somebody else
 During the next hour, you may re-roll any one save, attack roll, or skill check. If you do, you must take the new roll's result.
 Every creature within {tens_30} feet of you that hears you speak only hears insults as if you are casting vicious mockery at first level. This lasts {duration}.
 Every inanimate object that isn't being worn or carried within 40 feet of you becomes enshrouded with shadows for 1 minute. Enshrouded objects are considered heavily obscured.
+Fire that you create, either magical or non-magical, is {simple_color} for the next {duration}.
+Fire that you create, either magical or non-magical, is black. It sheds no light and makes no sound. for the next {duration}.
 For the {duration}, any spell you cast does not require a somatic component.
 For the {duration}, any spell you cast does not require a verbal component.
 For the next {duration_hours} you can comprehend all languages but only speak {language}.
@@ -98,6 +106,8 @@ Make a Wisdom saving throw against your spell save DC. If you fail, you are tran
 Make a Wisdom saving throw against your spell save DC. If you fail, you are transformed into a sheep for {duration_minutes}, as if by the polymorph spell.
 Mushrooms sprout around you in a 5-foot radius and vanish after 1 minute. If one is harvested and eaten within this time, the creature must make a Constitution saving throw against your spell save DC. On a failed save, it takes 5d{dice_type} poison damage. On successful one, it gains 5d{dice_type} temporary hit points.
 One non-magical item in your possession becomes magical.
+One non-magical item in your possession is permanently immune to fire damage.
+One non-magical item in your possession turns to ash in a bright flash.
 One randomly-chosen non-magical item in your possession that weighs 1 pound or less is duplicated.
 One randomly-chosen non-magical item in your possession that weighs 1 pound or less vanishes and is forever gone.
 Over the {duration_minutes}, all plants within 20 feet of you grow as if affected by the plant growth spell.
@@ -108,6 +118,7 @@ The caster learns the location of the nearest legendary magical item, either thr
 The caster learns the location of the nearest sentient magical item, either through a brief vision of it's location or an approximate distance from their current whereabouts.
 The Create Water effect occurs at the discression of the DM as if you cast Create or Destroy Water.
 The Destroy Water effect occurs at the discression of the DM as if you cast Create or Destroy Water.
+The energy type of all of your spells is {damage_type} for the next {duration_minutes}.
 The next ability check that you make within {duration_hours}, roll 1d{dice_type} and add the result.
 The next ability check that you make within {duration_hours}, roll 1d{dice_type} and subtract the result.
 The next creature that dies within the next minute within 30 feet, comes back to life as if you cast ressurection. It believes that you are it's diety.
@@ -122,6 +133,7 @@ The next spell you cast within the next minute that does damage, the damage is m
 The next time you cast a spell, do not roll on this chart.
 The next time you cast a spell, roll twice on this chart. Both effects will apply.
 The next time you fall below 0 hit points within the next month, you automatically fail your first death saving throw.
+The range of all of your {damage_type} spells is doubled for the next {duration_minutes}.
 Up to three creatures you choose within 30 feet of you take 1d{dice_type} lightning damage equal to your level.
 When you speak, insects fall out of your mouth and you make no sound. This lasts {duration_minutes}.
 When you speak, puzzle pieces fall out of your mouth and you make no sound. This lasts {duration_minutes}.
@@ -147,7 +159,9 @@ You can pass through any solid, non-magical wall that is 6 or fewer inches thick
 You can smell exceptionally well for {duration_minutes}, gaining blindsight with a radius of 10 feet and advantage on all Perception checks related to odor.
 You can teleport up to 20 feet as part of your movement on each of your turns, for {duration_minutes}.
 You can't speak for {duration_minutes}. When you try, pink bubbles float out of your mouth.
+You cannot speak, but gain the Breath Weapon Dragonborn ability with the {dragon_type} dragon type. This lasts {duration_minutes}.
 You cast Animate Dead on the nearest corpse within 1 mile.
+You cast Misty Step with the visual effect of becoming a cloud of dark smoke that reforms at the chosen spell location.
 You cast Misty Step, bursting into a flock of birds that reforms at the chosen spell location.
 You die and after 30 seconds True Ressurection is immediately cast on you by an available diety of the player's choosing. 
 You emanate light in a 30-foot radius for {duration_minutes}. Any creature within 5 feet of you that can see is blinded until the end of its next.
@@ -164,6 +178,8 @@ You gain proficiency in all {stat} checks for the next hour
 You gain proficiency in one skill of your choice that you're not already proficient in for {duration}.
 You gain proficiency in one tool or weapon type of your choice that you're not already proficient in for {duration}.
 You gain the ability to comprehend {language} permanently.
+You gain the ability to consume coal as if it were the fruit of a Goodberry spell. This lasts {duration}.
+You gain the ability to insects as if it were the fruit of a Goodberry spell. This lasts {duration}.
 You gain the ability to speak {language} for {duration}.
 You gain the ability to speak {language} permanently.
 You gain the ability to speak one additional language of your choice for {duration}.
@@ -192,6 +208,8 @@ You immediately lose {one_all} unspent sorcery points.
 You immediately take 1d{dice_type} {damage_type} damage. This damage does not bring you below 1 hit point.
 You immediately take 2d{dice_type} {damage_type} damage. This damage does not bring you below 1 hit point.
 You jump forward in time exactly 1 minute, for 1 minute. From the perspective of everyone else, you cease to exist during that time.
+You loose control of your magical power. All of your remaining spells slots and sorcery points are added and {single_target} takes 1d6 force damage for each.
+You loose control of your magical power. All of your remaining spells slots and sorcery points expended. A one-way gate to {plane} opens permanently.
 You loose the ability to speak a random language you know for {duration}.
 You lose proficiency in all skill rolls for {duration}.
 You lose the ability to {sense} for {duration}.
@@ -219,12 +237,14 @@ You transform into an {metal} statue of yourself for {duration_minutes}, during 
 You transform into an small-medium size inanimate object of the DM's choosing. During this time you are petrified. After {duration} you return to normal.
 Your {stat} {change_direction} by {ones_2} for {duration}.
 Your {stat} {change_direction} by {ones_2} permanently
+Your body temperature {change_direction} by 2d10 degrees permanently. You suffer no negative effects from this change.
 Your clothes become dirty and filthy. Until you can change and/or clean your clothes, your Charisma is reduced by 1.
 Your eyes glow {simple_color} for {duration}.
 Your eyes permanently change color and are now {simple_color}. A spell such as remove curse can end this effect.
 Your feet sink into the ground, making you completely immobile for {duration_minutes}. This has no effect if you were not standing on the ground when the spell was cast.
 Your fingernails and toenails grow to an uncomfortable length. Until you trim them, your Dexterity is reduced by 1 and your speed is reduced by 5 feet.
 Your fingers become sore for {duration}. During this time, you must succeed on a Dexterity saving throw against your spell save DC to cast a spell with a somatic component.
+Your hair appears like fire, gaining the effect of Continual Flame for the next {duration_hours}.
 Your hair turns {simple_color}.
 Your height {change_direction} by 1d6 inches. You gradually return to your original height over the course of {duration}.
 Your skin becomes dry and scaley. Your AC does not go below 16. This lasts {duration_minutes}.
