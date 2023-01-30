@@ -1,5 +1,5 @@
 from string import Formatter
-from typing import Dict, Any, Optional
+from typing import Dict, Optional
 
 import jinja2
 

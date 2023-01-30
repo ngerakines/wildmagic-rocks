@@ -18,8 +18,7 @@ dependencies = [
     "jinja2==3.1.2",
     "aiohttp_jinja2==1.5",
     "numpy==1.24.1",
-    "fnvhash==0.1.0",
-    "spacy==3.5.0",
+    "fnvhash==0.1.0"
 ]
 dynamic = ["version"]
 
