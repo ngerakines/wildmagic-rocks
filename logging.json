@@ -1,0 +1,13 @@
+{
+    "version": 1,
+    "root": {
+        "handlers": ["console"],
+        "level": "WARNING"
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "level": "WARNING"
+        }
+    }
+}
