@@ -10,7 +10,7 @@ A puddle of grease appears where you are standing, with a 10-foot radius. You an
 A random creature within 60 feet of you is poisoned for {duration_hours}.
 A rope in your position or with 10 feet of you is effected as if you cast Rope Trick for {duration_hours}.
 A third eye appears in your forehead, giving you advantage on sight-based Wisdom (Perception) checks for 1 minute.
-All attacks you make with a non-magical weapon gain a +1 bonus to hit and to damage, and are considered magical for the purpose of overcoming resistances. This lasts {duration}.
+All attacks you make with a non-magical weapon gain a +1 bonus to hit and to damage, and are considered magical for the purpose of overcoming resistances. This lasts {duration_minutes}.
 All creatures within 10 feet of you take 5d{dice_type} {damage_type} damage distributed evenly
 All creatures within 30 feet of you take 10d{dice_type} {damage_type} damage distributed evenly
 All non-magical food and drink is effected as if you cast Purify Food and Drink.

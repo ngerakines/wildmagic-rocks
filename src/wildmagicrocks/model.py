@@ -1,6 +1,5 @@
 from typing import Any, List, Set, Dict, Optional, Tuple
 from string import Formatter
-from enum import Flag, auto
 import numpy
 from fnvhash import fnv1a_64
 
@@ -9,31 +8,30 @@ from wildmagicrocks.util import RecursiveFormatter
 
 STATS = ["Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"]
 
+duration_weights = (["minute", "hour", "day"], [0.7, 0.29, 0.01])
 
-class Tags(Flag):
-    MINOR = auto()
-    MODERATE = auto()
-    MAJOR = auto()
+duration_values = {
+    "minute": ([1, 2, 3, 4, 5, 10, 15, 20, 30], [200, 100, 150, 100, 50, 40, 30, 20, 10]),
+    "hour": ([1, 2, 3, 6, 10, 12, 24], [200, 100, 20, 15, 10, 5, 1]),
+    "day": ([1, 2, 3, 5, 7, 14], [300, 150, 75, 25, 10, 1]),
+}
 
 
-def random_duration(rng: numpy.random.Generator, duration_range: Optional[int] = None) -> str:
-    if duration_range is None:
-        duration_range = rng.integers(1, 100)
+def random_duration(rng: numpy.random.Generator, duration_type: Optional[str] = None) -> str:
+    if duration_type is None:
+        duration_type = rng.choice(duration_weights[0], p=duration_weights[1])
+
+    values = duration_values[duration_type][0]
+
+    weights = numpy.array(duration_values[duration_type][1], dtype=numpy.float64)
+    weights /= weights.sum()
+
+    value = rng.choice(values, p=weights)
     plurality = ""
-    if duration_range == 100:
-        days = rng.integers(1, 7)
-        if days > 1:
-            plurality = "s"
-        return f"{days} day{plurality}"
-    elif duration_range > 50:
-        hours = rng.choice([1, 2, 3, 4, 6, 10, 12, 24])
-        if hours > 1:
-            plurality = "s"
-        return f"{hours} hour{plurality}"
-    minutes = rng.choice([1, 2, 3, 4, 5, 10, 20, 30, 60])
-    if minutes > 1:
+    if value > 1:
         plurality = "s"
-    return f"{minutes} minute{plurality}"
+
+    return f"{value} {duration_type}{plurality}"
 
 
 TARGETS: List[Tuple[str, bool]] = [
@@ -120,7 +118,7 @@ def random_target(rng: numpy.random.Generator, targets: List[str] = TARGETS, suf
 class Surge:
     def __init__(self, message: str, values: Dict[str, Any] = {}) -> None:
         self._message = message
-        self._message_fields = sorted(list(filter(None, set([v[1] for v in Formatter().parse(self._message)]))))
+        self._message_fields = sorted(list(filter(None, set([v[1] for v in Formatter().parse(self._message)] + ["target_scope_within_feet"]))))
 
     def __hash__(self):
         return fnv1a_64(self._message.encode("utf8"))
@@ -140,11 +138,11 @@ class Surge:
             if message_field == "duration":
                 placeholders[message_field] = random_duration(rng)
             elif message_field == "duration_minutes":
-                placeholders[message_field] = random_duration(rng, duration_range=1)
+                placeholders[message_field] = random_duration(rng, duration_type="minute")
             elif message_field == "duration_hours":
-                placeholders[message_field] = random_duration(rng, duration_range=51)
+                placeholders[message_field] = random_duration(rng, duration_type="hour")
             elif message_field == "duration_days":
-                placeholders[message_field] = random_duration(rng, duration_range=99)
+                placeholders[message_field] = random_duration(rng, duration_type="day")
             elif message_field == "change_direction":
                 placeholders[message_field] = rng.choice(["increases", "decreases"])
             elif message_field == "simple_color":
@@ -177,6 +175,10 @@ class Surge:
                 placeholders[message_field] = rng.choice(["hear", "see", "taste", "smell"])
             elif message_field == "dice_type":
                 placeholders[message_field] = rng.choice([2, 4, 6, 8, 10, 12, 20])
+            elif message_field == "dice_type_low":
+                placeholders[message_field] = rng.choice([2, 4, 6])
+            elif message_field == "dice_type_high":
+                placeholders[message_field] = rng.choice([8, 10, 12, 20])
             elif message_field == "lose_gain":
                 placeholders[message_field] = rng.choice(["lose", "gain"])
             elif message_field == "allies_enemies":
@@ -194,7 +196,9 @@ class Surge:
             elif message_field == "stat":
                 placeholders[message_field] = rng.choice(STATS)
             elif message_field == "low_spell_level":
-                placeholders[message_field] = rng.choice(["1st", "2nd", "3rd", "4th", "5th"])
+                placeholders[message_field] = rng.choice(["1st", "2nd", "3rd", "4th"])
+            elif message_field == "high_spell_level":
+                placeholders[message_field] = rng.choice(["5th", "6th", "7th", "8th"])
             elif message_field == "ones_2":
                 placeholders[message_field] = rng.integers(1, 2)
             elif message_field == "ones_5":
@@ -236,9 +240,9 @@ class Surge:
                 placeholders[message_field] = random_target(rng, targets=OTHER_SINGLE_TARGET)
             elif message_field == "beneficial_target_gains":
                 placeholders[message_field] = random_target(rng, targets=FRIENDLY_TARGETS, suffix=("gains", "gain"))
+            elif message_field == "target_scope_within_feet":
+                placeholders[message_field] = rng.choice([10, 20, 30])
 
-        target_scope_rng = numpy.random.default_rng(seed)
-        placeholders["target_scope_within_feet"] = target_scope_rng.choice([10, 20, 30])
         return RecursiveFormatter().format(self._message, **placeholders)
 
 
@@ -268,7 +272,7 @@ class SurgeIndex:
             surge_id = rng.choice(surge_ids)
             surges.add(self._surges[surge_id])
 
-        return [(surge.render(seed).capitalize(), repr(surge)) for surge in sorted(surges, key=lambda x: hash(x))]
+        return [(self.normalize(surge.render(seed)), repr(surge)) for surge in sorted(surges, key=lambda x: hash(x))]
 
     def find_surge(self, seed: int, surge_id: str, raw: bool = False) -> Optional[Tuple[str, str]]:
         surge: Optional[Surge] = self._surges.get(surge_id, None)
@@ -276,4 +280,13 @@ class SurgeIndex:
             return None
         if raw:
             return surge._message, repr(surge)
-        return surge.render(seed).capitalize(), repr(surge)
+        return self.normalize(surge.render(seed)), repr(surge)
+
+    def normalize(self, message: str) -> str:
+        results: List[str] = []
+        for sent in message.split("."):
+            sent = sent.strip().strip(".").capitalize()
+            if len(sent) == 0:
+                continue
+            results.append(f"{sent}.")
+        return " ".join(results)
