@@ -127,7 +127,7 @@ You lose the ability to {sense} for {duration}.
 You make no sounds for {duration_minutes} and you gain advantage on any Dexterity (Stealth) checks.
 You may immediately take 1 additional action.
 You may not speak unless you are dancing, for {duration}.
-You may not speak unless you are stepping, for {duration}.
+You may not speak unless you are waiving your arms or hands if you have any, for {duration}.
 You must shout when you speak for {duration}.
 You must whisper when you speak for {duration}.
 You permanently forget one cantrip. A spell such as remove curse can restore your memory.
