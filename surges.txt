@@ -1,3 +1,11 @@
+{beneficial_single_target_gains} the effect of Protection from Energy for {duration}.
+{beneficial_single_target_gains} the effect of Protection from Evil and Good for {duration}.
+{beneficial_single_target_gains} the effect of Protection from Poison for {duration}.
+{beneficial_single_target_gains} the effect of Spider Climb for {duration}.
+{beneficial_single_target_gains} the effect of tremorsense with a range of 30 feet for {duration}.
+{beneficial_single_target_gains} the service of an arcane eye for {duration}.
+{beneficial_single_target_gains} the service of an arcane sword for {duration}.
+{beneficial_single_target_gains} the service of an unseen servant for {duration}.
 {gain_target} {ones_2} to attack and damage rolls for any melee attack they make within the next {duration_minutes}.
 {gain_target} {ones_2} to attack and damage rolls for any ranged attack they make within the next {duration_minutes}.
 {gain_target} a {ones_2} penalty to attack rolls, damage rolls, and their AC.
@@ -6,13 +14,9 @@
 {gain_target} the ability to breathe under water for {duration}.
 {gain_target} the ability to speak with animals for {duration}.
 {gain_target} the ability to walk on water for {duration}.
-{gain_target} the effect of Blindsight with a radius of 60 feet for {duration}.
-{gain_target} the effect of Blink for {duration_minutes}.
-{gain_target} the effect of Blur for {duration}.
 {gain_target} the effect of Confusion for {duration_minutes}.
 {gain_target} the effect of Cure Wounds as if you cast it.
 {gain_target} the effect of Darkvision with a radius of 60 feet for {duration}.
-{gain_target} the effect of Death Ward for {duration}.
 {gain_target} the effect of Detect Evil and Good for {duration}.
 {gain_target} the effect of Detect Magic for {duration}.
 {gain_target} the effect of Detect Poison and Disease for {duration}.
@@ -24,28 +28,24 @@
 {gain_target} the effect of Feather Fall for {duration}.
 {gain_target} the effect of Fly for {duration}.
 {gain_target} the effect of Freedom of Movement for {duration}.
-{gain_target} the effect of Invisibility and Silence for {duration_minutes}. The effect ends for a target that attacks, or casts a spell.
 {gain_target} the effect of Levitate for {duration}.
-{gain_target} the effect of Mirror Image for {duration}.
-{gain_target} the effect of Protection from Energy for {duration}.
-{gain_target} the effect of Protection from Evil and Good for {duration}.
-{gain_target} the effect of Protection from Poison for {duration}.
 {gain_target} the effect of Reduce as part of Enlarge/Reduce for {duration}.
 {gain_target} the effect of Shield for {duration}.
 {gain_target} the effect of Silence for {duration_minutes}.
 {gain_target} the effect of Sleep for {duration_minutes}.
-{gain_target} the effect of Slow for {duration_minutes}.
-{gain_target} the effect of Spider Climb for {duration}.
-{gain_target} the effect of tremorsense with a range of 30 feet for {duration}.
 {gain_target} the service of a {low_spell_level}-level spirital weapon for {duration_minutes}.
 {gain_target} the service of a phantom steed for {duration}.
-{gain_target} the service of an arcane eye for {duration}.
-{gain_target} the service of an arcane sword for {duration}.
-{gain_target} the service of an unseen servant for {duration}.
 {gain_target} vulnerability to {damage_type} damage for {duration_minutes}.
 {lose_target} {ones_2} to attack and damage rolls for any melee attack they make within the next {duration_minutes}.
 {lose_target} {ones_2} to attack and damage rolls for any ranged attack they make within the next {duration_minutes}.
 {ones_5}d{dice_type} {currency} pieces appear near you.
+{single_target_gains} the effect of Blindsight with a radius of 60 feet for {duration}.
+{single_target_gains} the effect of Blink for {duration_minutes}.
+{single_target_gains} the effect of Blur for {duration}.
+{single_target_gains} the effect of Death Ward for {duration}.
+{single_target_gains} the effect of Invisibility and Silence for {duration_minutes}. The effect ends for a target that attacks, or casts a spell.
+{single_target_gains} the effect of Mirror Image for {duration}.
+{single_target_gains} the effect of Slow for {duration_minutes}.
 {target_heals} up to {ones_5}d{dice_type} hit points.
 {target} make a Strength saving throw against your spell save DC or be knocked prone.
 {target} must Constitution saving throw against your spell save DC. If you fail, they are stunned for {duration_minutes}.

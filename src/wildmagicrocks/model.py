@@ -92,6 +92,16 @@ FRIENDLY_TARGETS: List[Tuple[str, bool]] = [
     ("all other friendly creatures", False),
 ]
 
+FRIENDLY_SINGLE_TARGETS: List[Tuple[str, bool]] = [
+    ("you", False),
+    ("a random ally", True),
+    ("an ally you choose", True),
+    ("all allies", False),
+    ("you and your allies", False),
+    ("all friendly creatures", False),
+    ("all other friendly creatures", False),
+]
+
 TARGET_SCOPES: List[str] = [
     "in your line of sight",
     "within {target_scope_within_feet} feet",
@@ -275,10 +285,14 @@ class Surge:
                 placeholders[message_field] = random_target(rng, targets=OTHER_TARGETS)
             elif message_field == "single_target":
                 placeholders[message_field] = random_target(rng, targets=SINGLE_TARGET)
+            elif message_field == "single_target_gains":
+                placeholders[message_field] = random_target(rng, targets=SINGLE_TARGET, suffix=("gains", "gain"))
             elif message_field == "other_single_target":
                 placeholders[message_field] = random_target(rng, targets=OTHER_SINGLE_TARGET)
             elif message_field == "beneficial_target_gains":
                 placeholders[message_field] = random_target(rng, targets=FRIENDLY_TARGETS, suffix=("gains", "gain"))
+            elif message_field == "beneficial_single_target_gains":
+                placeholders[message_field] = random_target(rng, targets=FRIENDLY_SINGLE_TARGETS, suffix=("gains", "gain"))
             elif message_field == "target_scope_within_feet":
                 placeholders[message_field] = rng.choice([10, 20, 30])
 
