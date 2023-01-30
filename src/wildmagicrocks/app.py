@@ -14,5 +14,11 @@ def main():
 
 if __name__ == "__main__":
     if os.getenv("SENTRY_DSN"):
-        sentry_sdk.init(integrations=[AioHttpIntegration()])
+        sentry_sdk.init(
+            integrations=[AioHttpIntegration()],
+            traces_sample_rate=1.0,
+            _experiments={
+                "profiles_sample_rate": 1.0,
+            },
+        )
     main()
