@@ -283,10 +283,12 @@ class SurgeIndex:
         return self.normalize(surge.render(seed)), repr(surge)
 
     def normalize(self, message: str) -> str:
-        results: List[str] = []
+        # Nick: This is ugly. I know.
+        values: List[str] = []
         for sent in message.split("."):
-            sent = sent.strip().strip(".").capitalize()
+            sent = sent.strip().removesuffix(".").strip()
             if len(sent) == 0:
                 continue
-            results.append(f"{sent}.")
-        return " ".join(results)
+            words = sent.split(" ")
+            values.append(words[0].title() + " " + " ".join(words[1:]) + ".")
+        return " ".join(values)
