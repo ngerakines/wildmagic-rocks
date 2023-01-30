@@ -224,6 +224,10 @@ class Surge:
                         "undead",
                     ]
                 )
+            elif message_field == "language":
+                placeholders[message_field] = rng.choice(
+                    ["common", "dawrven", "elven", "gian", "gnomish", "goblin", "halfling", "orc", "abyssal", "celestial", "draconic", "deep speech", "infernal", "primordial", "sylvan", "undercommon"]
+                )
             elif message_field == "gain_target":
                 placeholders[message_field] = random_target(rng, suffix=("gains", "gain"))
             elif message_field == "lose_target":
