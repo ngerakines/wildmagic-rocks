@@ -317,7 +317,7 @@ class SurgeIndex:
         if count > 100:
             count = 100
 
-        surge_ids: List[str] = list(self._surges.keys())
+        surge_ids: List[str] = list(sorted(set(self._surges.keys())))
 
         rng = numpy.random.default_rng(seed)
         surges: Set[Surge] = set()
