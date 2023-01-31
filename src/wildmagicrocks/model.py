@@ -240,6 +240,8 @@ class Surge:
                 placeholders[message_field] = rng.choice([10, 20, 30])
             elif message_field == "stat":
                 placeholders[message_field] = rng.choice(STATS)
+            elif message_field == "left_right":
+                placeholders[message_field] = rng.choice(["left", "right"])
             elif message_field == "low_spell_level":
                 placeholders[message_field] = rng.choice(["1st", "2nd", "3rd", "4th"])
             elif message_field == "high_spell_level":
@@ -250,7 +252,7 @@ class Surge:
                 placeholders[message_field] = rng.integers(1, 5)
             elif message_field == "ones_10":
                 placeholders[message_field] = rng.integers(1, 10)
-            elif message_field == "createure_type":
+            elif message_field == "creature_type":
                 placeholders[message_field] = rng.choice(
                     [
                         "aberrations",

@@ -1,3 +1,5 @@
+{beneficial_single_target_gains} 1 to all ability scores permanently.
+{beneficial_single_target_gains} the ability to see creature alignments as if a colored aura around them.
 {beneficial_single_target_gains} the effect of Protection from Energy for {duration}.
 {beneficial_single_target_gains} the effect of Protection from Evil and Good for {duration}.
 {beneficial_single_target_gains} the effect of Protection from Poison for {duration}.
@@ -39,51 +41,102 @@
 {lose_target} {ones_2} to attack and damage rolls for any melee attack they make within the next {duration_minutes}.
 {lose_target} {ones_2} to attack and damage rolls for any ranged attack they make within the next {duration_minutes}.
 {ones_5}d{dice_type} {currency} pieces appear near you.
+{other_single_target} must make a Wisdom saving throw against your spell save DC. Upon failure, their hand is controlled by you as if it were a Mage Hand but corporal and attached to them. This lasts {duration_minutes}.
+{single_target_gains} a condition whereby reading non-magical text occurs in the form of shouting, but the subject believes they are reading quietly to themselves. This lasts for {duration_hours}.
+{single_target_gains} a non-offensive tattoo on a primary visible body part. A spell such as remove curse can end this effect.
+{single_target_gains} a severe nut allergy.
+{single_target_gains} an offensive or blasphemous tattoo on a primary visible body part. A spell such as remove curse can end this effect.
+{single_target_gains} arthritis giving them -2 to Dexterity and Strength for {duration}. A spell such as remove curse can end this effect.
+{single_target_gains} immunity to all forms of damage while sleeping and will sleep soundly, unable to be woken for 8 hours while sleeping. This lasts {duration_days}.
+{single_target_gains} instantly receives the benefits of a long rest.
+{single_target_gains} instantly receives the benefits of a short rest.
+{single_target_gains} the ability to predict the weather of their immediate location with high accuracy for {duration_days}.
+{single_target_gains} the ability to telepahtically communicate with all {creature_type} for {duration}.
+{single_target_gains} the common cold.
 {single_target_gains} the effect of Blindsight with a radius of 60 feet for {duration}.
 {single_target_gains} the effect of Blink for {duration_minutes}.
 {single_target_gains} the effect of Blur for {duration}.
 {single_target_gains} the effect of Death Ward for {duration}.
+{single_target_gains} the effect of having bees come out of any open wounds for the next {duration_hours}.
 {single_target_gains} the effect of Invisibility and Silence for {duration_minutes}. The effect ends for a target that attacks, or casts a spell.
 {single_target_gains} the effect of Mirror Image for {duration}.
 {single_target_gains} the effect of Slow for {duration_minutes}.
+{single_target_gains} the sensation of having a pebble in their shoe or boot for {duration_days}.
+{single_target_gains} the sensation that the food they consume is screaming in agony at them. This lasts {duration}.
+{single_target_gains} the sudden irresistible urge to try and lift heavy objects. This lasts until they lift something that they deem to be sufficiently challenging to do so or {duration_days}, and they will not accept outside help.
+{single_target} becomes very talented at mimicing animal noises.
+{single_target} must make a Charisma saving throw against your spell save DC or be incapable of lying for {duration_days}.
+{single_target} must make a Charisma saving throw against your spell save DC or be incapable of telling the truth for {duration_days}.
+{single_target} must make a Constitution saving throw against your spell save DC or become color blind for {duration_days}.
+{single_target} must make a Constitution saving throw against your spell save DC. If you fail, they are stunned for {duration_minutes}.
+{single_target} must make a Constitution saving throw against your spell save DC. Upon failure, they grown a single antler over the next {duration_hours}.
+{single_target} must make a Constitution saving throw against your spell save DC. Upon failure, they grown a single horn over the next {duration_hours}.
+{single_target} must make a Strength saving throw against your spell save DC or be knocked prone.
+{single_target} must make a Strength saving throw against your spell save DC or be knocked prone.
+{single_target} must make a Wisdom saving throw against your spell save DC or be frightened of you.
+{single_target} must make a Wisdom saving throw against your spell save DC or be unable to sleep for 1d6 days.
+{single_target} must make a Wisdom saving throw against your spell save DC or be utterly and entirely erased from existence. They have advantage on this roll.
+{single_target} must make a Wisdom saving throw against your spell save DC or forgets what they were doing and must take their next turn remembering. They may not take reactions during this time.
+{single_target} must make a Wisdom saving throw against your spell save DC or hear a sinister voice whispering into their ear, playing off of their fears and insecurities. This last 1d6+3 days.
+{single_target} must re-roll their initiative if in combat.
+{single_target} rotates 180 degrees.
 {target_heals} up to {ones_5}d{dice_type} hit points.
-{target} make a Strength saving throw against your spell save DC or be knocked prone.
-{target} must Constitution saving throw against your spell save DC. If you fail, they are stunned for {duration_minutes}.
-{target} must make a Strength saving throw against your spell save DC or be knocked prone.
-{target} must make a Wisdom saving throw against your spell save DC or be frightened of you.
 {target} takes 1d{dice_type} {damage_type} damage.
 {target} takes 2d{dice_type} {damage_type} damage.
 {target} takes 3d{dice_type} {damage_type} damage.
 3d{dice_type} random gems appear near you, worth 50gp each.
+A 10 foot radious of ground around you dries and ages 1d10*10 years. Rocks turn to sand, water evaporates, and all plant life shrivels into dead twigs. Creatures in the area are unaffected.
 A 30-foot cube hypnotic pattern appears with you at the center. All creatures within the pattern must succeed on a Wisdom saving throw or fall asleep for 1 minute or until they take damage.
 A bad joke comes to mind and until you tell it (which takes an entire action), you suffer a Wisdom penalty of 1.
+A Beholder appears within 1 mile.
 A cat falls from above causing 1d4 bludgeoning damage to {single_target}.
 A chaotic nuetral goose with an intelligence of 6 appears from behind you and follows you around. It won't go away for {duration_hours}.
 A dog falls from above causing 1d4 bludgeoning damage to {single_target}.
+A Dragon appears within 1 mile.
 A duplicate of yourself appears in the nearest open space which can take actions independently, and goes on the same Initiative as you. However, any damage it takes as well as any spell slots or sorcery point it uses applies to you as well. This lasts {duration_minutes}.
 A fireball explodes with you at the center. You and each creature within 20 feet must make a Dexterity saving throw using your spell save DC, taking 5d6 fire damage on a failed save, or half as much damage on a successful one.
 A gentle gust of wind blows outward from you. All creatures within 40 feet of you can feel it, but it otherwise does nothing.
 A ghoul rises from the earth under your control. It ceases to be controlled by you after 2d4 hours.
+A gold bar worth 1d6x{fives_25} GP appears alongside your possesions.
+A huge non-magical beast appropriate to your location appears within 150 feet.
+A large earthquake occurs within 10 miles.
+A large non-magical beast appropriate to your location appears within 100 feet.
 A loud boom emanates from you. All creatures within 15 feet take 2d8 thunder damage and must make a Constitution saving throw against your spell save DC or be deafened for {duration_minutes}.
 A magic mouth appears on a nearby wall or flat surface. When you speak, your voice comes from the magic mouth. This lasts for {duration_minutes}.
+A massive explosion can be heard from far off in the distance. Within 1d6 days, the party will hear news of some great disaster occurring in the general direction of the explosion. Any attempts by others to link these happenings to the caster will fail.
+A medium non-magical beast appropriate to your location appears within 50 feet.
+A medium size stone with a face appears in an unoccupied space within 10 feet of the caster. It will answer the next question given to it. It disspears after the answer is given or after 1d6*10 minutes.
 A puddle of grease appears where you are standing, with a 10-foot radius. You and anyone within 10 feet of you must make a Dexterity check at your spell save DC or fall prone.
+A Purple Worm immediately bursts from the ground and makes a single Bite attack against a random creature within 60 feet within your line of sight, including swallowing it. After that attack, the worm disappears into the earth, along with any creatures it has swallowed.
 A random creature within 60 feet of you is poisoned for {duration_hours}.
 A rope in your position or with 10 feet of you is effected as if you cast Rope Trick for {duration_hours}.
+A single coconut falls from above onto your head, automatically knocking you unconscious for 1d4 rounds and dealing 1 bludgeoning damage.
+A single non-magical object within 100 feet is replaced with a Mimic.
+A small earthquake occurs within 1 miles.
+A structure within 1 mile becomes Neutral Evil Sentient. It cannot communicate, but can gradually manipulate itself and anything within it. It may use tactics such as shifting geometry, phantom noises and household accidents to terrify and injure anyone who sets foot inside.
 A third eye appears in your forehead, giving you advantage on sight-based Wisdom (Perception) checks for 1 minute.
 All {allies_creatures_enemies} within your line of sight takes {ones_5}d{dice_type} necrotic damage. You regain hit points equal to the sum of damage dealt.
 All alcoholic or intoxicating liquid within 30 feet becomes water.
 All attacks you make with a non-magical weapon gain a +1 bonus to hit and to damage, and are considered magical for the purpose of overcoming resistances. This lasts {duration_minutes}.
+All available space on your person (bags, pockets, etc) is filled with sand.
+All creatures and loose objects within 10 feet are teleported {tens_30} feet into the air.
 All creatures within 10 feet of you take 5d{dice_type} {damage_type} damage distributed evenly
 All creatures within 30 feet of you take 10d{dice_type} {damage_type} damage distributed evenly
+All doors within {tens_30} feet of you close and become magically locked as if Arcane Lock was cast. The magical effect dissapates after {duration_minutes}.
+All doors within {tens_30} feet of you close.
+All doors within {tens_30} feet of you open.
 All fires within 30 feet are now {simple_color} until extinguished.
 All fires witin 30 feet become extinguished. You gain 1d6 hit points for each 5 foot square put out.
 All non-magical food and drink is effected as if you cast Purify Food and Drink.
 All non-magical items within 10 feet are repaired as if you cast Mending.
+All non-magical liquids within {tens_30} feet that are uncovered immediately heated to a boil.
 All of your non-magical clothing and equipment teleports to the nearest open space at least 15 feet from you that you can see.
 All spells that {target} cast within the next minute automatically fail.
 All spells with a casting time of 1 action or 1 bonus action require 2 consecutive actions to cast. This lasts {duration}.
 All water within 30 feet becomes common red wine.
 An creature of your CR of the DM's choosing appears within {tens_30} feet of you. Make a Charisma saving throw against your spell save DC. If you succeed it, the creature is subservient, otherwise, it is hostile. The creature, if not banished or defeated, vanishes after {duration_days}.
+An earthquake occurs within 5 miles.
+An ethereal humanoid figure appears behind you, narrating your every action for {duration_hours}. At the end of this time, a scroll containing the written record of your every action during that time appears alongside your possessions. Any creature that spends 1d4 hours studying it has advantage against you. The scroll cannot be destroyed.
 Any creature you touch takes 1d{dice_type} lightning damage. This lasts {duration}.
 Any flammable item you touch, that you aren't already wearing or carrying, bursts into flame. This lasts {duration_minutes}.
 Choose 1 permanent or triggered effect that has happened to you or somebody else that you've received from a wild magic surge and remove it, even if it was beneficial.
@@ -99,12 +152,19 @@ For the next {duration_hours}, your skin tone changes color every 30 minutes, cy
 For the next day, each time you say a word with the 's' sound, it sounds like a hissing snake.
 If you cast a spell with a saving throw within the next minute, the target gains disadvantage on its saving throw.
 Illusory butterflies and flower petals flutter in the air around you in a 10-foot radius for {duration}.
+It begins to rain heavily in the surrounding area. This last {duration}.
+It begins to rain in the surrounding area. This last {duration}.
+It begins to snow heavily in the surrounding area. This last {duration}.
+It begins to snow in the surrounding area. This last {duration}.
+It begins to snow with blizzard-like conditions in the surrounding area. This last {duration}.
 Make a Wisdom saving throw against your spell save DC. If you fail, you are transformed into a beast of your CR from your current plane for {duration_minutes}, as if by the polymorph spell.
 Make a Wisdom saving throw against your spell save DC. If you fail, you are transformed into a creature type in your line of sight at random for {duration_minutes}, as if by the polymorph spell.
 Make a Wisdom saving throw against your spell save DC. If you fail, you are transformed into a creature type of your choosing in your line of sight for {duration_minutes}, as if by the polymorph spell.
 Make a Wisdom saving throw against your spell save DC. If you fail, you are transformed into a non-intelligent small-medium size creature for {duration_minutes}, as if by the polymorph spell.
 Make a Wisdom saving throw against your spell save DC. If you fail, you are transformed into a sheep for {duration_minutes}, as if by the polymorph spell.
 Mushrooms sprout around you in a 5-foot radius and vanish after 1 minute. If one is harvested and eaten within this time, the creature must make a Constitution saving throw against your spell save DC. On a failed save, it takes 5d{dice_type} poison damage. On successful one, it gains 5d{dice_type} temporary hit points.
+Music with a tone and tempo appropriate to your actions accompanies you. This lasts {duration_hours}.
+Music with a tone and tempo inappropriate to your actions accompanies you. This lasts {duration_hours}.
 One non-magical item in your possession becomes magical.
 One non-magical item in your possession is permanently immune to fire damage.
 One non-magical item in your possession turns to ash in a bright flash.
@@ -119,6 +179,7 @@ The caster learns the location of the nearest sentient magical item, either thro
 The Create Water effect occurs at the discression of the DM as if you cast Create or Destroy Water.
 The Destroy Water effect occurs at the discression of the DM as if you cast Create or Destroy Water.
 The energy type of all of your spells is {damage_type} for the next {duration_minutes}.
+The nearest pillar or tree falls over.
 The next ability check that you make within {duration_hours}, roll 1d{dice_type} and add the result.
 The next ability check that you make within {duration_hours}, roll 1d{dice_type} and subtract the result.
 The next creature that dies within the next minute within 30 feet, comes back to life as if you cast ressurection. It believes that you are it's diety.
@@ -130,11 +191,14 @@ The next spell you cast that does damage, the effect is minimized.
 The next spell you cast within the hour uses a slot level one level higher than what it normally requires.
 The next spell you cast within the next hour uses a spell slot of one level lower than what it normally requires. If the spell is a spell of 1st level, you still must expend a spell slot to cast it.
 The next spell you cast within the next minute that does damage, the damage is maximized.
+The next statue that you touch within {duration_days} awakens as a Stone Golem.
 The next time you cast a spell, do not roll on this chart.
 The next time you cast a spell, roll twice on this chart. Both effects will apply.
 The next time you fall below 0 hit points within the next month, you automatically fail your first death saving throw.
 The range of all of your {damage_type} spells is doubled for the next {duration_minutes}.
 Up to three creatures you choose within 30 feet of you take 1d{dice_type} lightning damage equal to your level.
+When a creature makes eye contact with you for the first time, a random non-magical object within 30 feet of you doubles in size. This happens at most once an hour. This lasts {duration_days}.
+When a creature sneezes and you hear it, a random non-magical object within 30 feet of you doubles in size. This happens at most once an hour. This lasts {duration_days}.
 When you speak, insects fall out of your mouth and you make no sound. This lasts {duration_minutes}.
 When you speak, puzzle pieces fall out of your mouth and you make no sound. This lasts {duration_minutes}.
 You {lose_gain} 1d6x4 percent of your weight. You gradually return to your original weight over the course of {duration}.
@@ -145,16 +209,17 @@ You are at the center of a Darkness spell as if you cast it for {duration_minute
 You are at the center of a Fog Cloud spell as if you cast it for {duration_minutes}.
 You are immune to disease for {duration_days}.
 You are immune to intoxication for {duration_days}.
-You are protected from {createure_type} for {duration}. Such creatures cannot attack you or harm you unless they save a Charisma saving throw against your spell save DC.
+You are protected from {creature_type} for {duration}. Such creatures cannot attack you or harm you unless they save a Charisma saving throw against your spell save DC.
 You are surrounded by a faint, offensive odor for 1 minute. You gain disadvantage on all Charisma checks.
 You are surrounded by a faint, pleasant odor. You gain advantage on all Charisma checks you make within the next minute.
 You are surrounded by a horrible, noxious odor for 1 minute. Anyone within 10 feet of you must make a Constitution saving throw or be stunned.
 You are transformed into a different gender (if possible) of your current creature type, as if by the polymorph spell.
 You are unable to cast any spell that causes damage of any type. This effect lasts {duration}.
 You are unable to read as the letters all appeared jumbled. This effect lasts {duration}.
-You are vulnerable to {createure_type} for {duration}. Such creatures gain advantage when attacking you.
+You are vulnerable to {creature_type} for {duration}. Such creatures gain advantage when attacking you.
 You become intoxicated for {duration_hours}.
 You can hear exceptionally well for {duration_minutes}, gaining advantage for all Perception checks related to sound.
+You can only speak in phrases that are in alphabetical order.  This lasts {duration_hours}.
 You can pass through any solid, non-magical wall that is 6 or fewer inches thick. This effect lasts {duration}.
 You can smell exceptionally well for {duration_minutes}, gaining blindsight with a radius of 10 feet and advantage on all Perception checks related to odor.
 You can teleport up to 20 feet as part of your movement on each of your turns, for {duration_minutes}.
@@ -162,7 +227,8 @@ You can't speak for {duration_minutes}. When you try, pink bubbles float out of 
 You cannot speak, but gain the Breath Weapon Dragonborn ability with the {dragon_type} dragon type. This lasts {duration_minutes}.
 You cast Animate Dead on the nearest corpse within 1 mile.
 You cast Misty Step with the visual effect of becoming a cloud of dark smoke that reforms at the chosen spell location.
-You cast Misty Step, bursting into a flock of birds that reforms at the chosen spell location.
+You cast Misty Step with the visual effect of bursting into a flock of birds that reforms at the chosen spell location.
+You cast Reverse Gravity with yourself as the center point.
 You die and after 30 seconds True Ressurection is immediately cast on you by an available diety of the player's choosing. 
 You emanate light in a 30-foot radius for {duration_minutes}. Any creature within 5 feet of you that can see is blinded until the end of its next.
 You fall victim to a horrible cramp in both legs, reducing your speed by 10 feet for {duration_minutes}.
@@ -170,7 +236,7 @@ You feel extremely nauseated. Make a Constitution saving throw against your spel
 You gain a -2 penalty to your AC for 1 minute.
 You gain a +1 to your AC for one minute.
 You gain a +2 bonus to your AC for 1 minute.
-You gain advantage against all {createure_type} for {duration}.
+You gain advantage against all {creature_type} for {duration}.
 You gain advantage against all {damage_type} damage for {duration}.
 You gain advantage on {stat} checks when dealing with any creature wearing {simple_color}, but disadvantage if they are wearing not.
 You gain an additional spell slot of your highest level for 1 week.
@@ -191,6 +257,7 @@ You get gain a -1 penalty to your AC for 1 minute.
 You glow bright {simple_color}. You have disadvantage on Stealth checks and anyone trying to perceive you has advantage on their Perception check. This lasts {duration_hours}.
 You grow 1d{dice_type} inches in height. You gradually return to your original height over the course of {duration}.
 You grow a beard made of feathers, which remains until you sneeze.
+You grow an additional finger on one of your {left_right} hand over the course of 1d6 hours. A spell such as remove curse can end this effect.
 You have a faint {simple_color} glow. Anyone trying to perceive you has advantage on their Perception check. This lasts {duration_hours}.
 You have a momentary vision of your own death. If you fail a Wisdom saving roll at your spell DC, you are frightened for {duration_minutes}.
 You have double vision. This gives you disadvantage on ranged attacks (including spell attacks) and Perception checks involving sight. This effect lasts {duration}.
@@ -198,6 +265,7 @@ You have the irresistible urge to scratch an itch in the middle your back, just 
 You hear a ringing in your ears for {duration_minutes}. During this time, casting a spell that requires a verbal component requires a Constitution check against your spell save DC.
 You immediately drop to 0 hit points.
 You immediately drop to 1 hit point.
+You immediately drop to 1 hit point. At the beginning of your next turn, you regain all of the hit points lost to this effect.
 You immediately gain {fives_25} temporary hit points for {duration}.
 You immediately heal {fives_25} hit points.
 You immediately heal 1d{dice_type} hit points.
@@ -213,7 +281,10 @@ You loose control of your magical power. All of your remaining spells slots and 
 You loose the ability to speak a random language you know for {duration}.
 You lose proficiency in all skill rolls for {duration}.
 You lose the ability to {sense} for {duration}.
+You lose the ability to speak {language} if you were previously able to speak it, for {duration}.
+You lose the ability to speak {language} if you were previously able to speak it, permanently.
 You make no sounds for {duration_minutes} and you gain advantage on any Dexterity (Stealth) checks.
+You may immediately cast the spell Wish, and take a level of exhaustion after doing so.
 You may immediately take 1 additional action.
 You may not speak unless you are dancing, for {duration}.
 You may not speak unless you are waiving your arms or hands if you have any, for {duration}.
@@ -247,6 +318,8 @@ Your fingers become sore for {duration}. During this time, you must succeed on a
 Your hair appears like fire, gaining the effect of Continual Flame for the next {duration_hours}.
 Your hair turns {simple_color}.
 Your height {change_direction} by 1d6 inches. You gradually return to your original height over the course of {duration}.
+Your lifespan increases by 1d10*20 years.
+Your shadow immediately becomes a Shadow that is neutral towards you and your party members. It will remain behind/under you to avoid direct light, and will attack anything that attempts to expose it to light, or otherwise harm it.
 Your skin becomes dry and scaley. Your AC does not go below 16. This lasts {duration_minutes}.
 Your skin becomes semi-translucent making your veins and muscles visible to others. This lasts {duration}.
 Your skin permanently darkens as if you have a tan, or if you are already dark-skinned, your skin becomes one shade lighter. A spell such as remove curse can end this effect.
