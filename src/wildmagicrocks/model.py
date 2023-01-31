@@ -139,7 +139,7 @@ class Surge:
         return NotImplemented
 
     def __repr__(self) -> str:
-        return hex(self.__hash__())
+        return "{:x}".format(self.__hash__())
 
     def render(self, seed: int) -> str:
         placeholders: Dict[str, str] = {}
@@ -310,6 +310,7 @@ class SurgeIndex:
                 for line in source_file.readlines():
                     surge = Surge(line)
                     self._surges[repr(surge)] = surge
+        self._surge_ids: List[str] = list(sorted(set(self._surges.keys())))
 
     def random_surges(self, seed: int, count: int = 5) -> List[Tuple[str, str]]:
         if count < 5:
@@ -317,14 +318,12 @@ class SurgeIndex:
         if count > 100:
             count = 100
 
-        surge_ids: List[str] = list(sorted(set(self._surges.keys())))
-
         rng = numpy.random.default_rng(seed)
         surges: Set[Surge] = set()
         attempts = 0
         while attempts < count * 2 and len(surges) < count:
             attempts += 1
-            surge_id = rng.choice(surge_ids)
+            surge_id = rng.choice(self._surge_ids)
             surges.add(self._surges[surge_id])
 
         return [(self.normalize(surge.render(seed)), repr(surge)) for surge in sorted(surges, key=lambda x: hash(x))]
