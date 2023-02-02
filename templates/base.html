@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" {%- if color_scheme %} data-theme="{{ color_scheme }}"{%- endif %}>
+<html lang="en" {%- if color_scheme %} data-theme="{{ color_scheme }}" {%- endif %}>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,13 +21,14 @@
             <li><strong>Wild Magic Rocks!</strong></li>
         </ul>
         <ul>
+            <li><a href="{{ url('rules') }}">Rules</a></li>
             <li><a href="{{ url('surge') }}">Surge Generator</a></li>
             <li><a href="{{ url('surge_table') }}">Surge Table Generator</a></li>
-            <li><a href="{{ url('rules') }}">Rules</a></li>
             <li><a href="{{ url('help') }}">Help</a></li>
             <li>(<a href="{{ light_url }}">Light</a> | <a href="{{ dark_url }}">Dark</a>)</li>
         </ul>
     </nav>
     <main class="container-fluid">{% block content %}{% endblock %}</main>
 </body>
+
 </html>

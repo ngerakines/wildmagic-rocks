@@ -1,9 +1,11 @@
 {%- extends "base.html" -%}
 {%- block content -%}
 <p>
-    <a href="{{ url('surge_table', query_={'count': count}) }}" role="button">Generate</a> 
-    <a href="{{ url('surge_table', query_={'count': count, 'seed': seed, 'selected': selected}) }}" role="button" class="secondary">Permalink</a>
-    <a href="{{ url('surge_table', query_={'count': count, 'seed': seed, 'selected': -1}) }}" role="button" class="secondary">Select Random</a>
+    <a href="{{ url('surge_table', query_={'count': count}) }}" role="button">Generate</a>
+    <a href="{{ url('surge_table', query_={'count': count, 'seed': seed, 'selected': selected}) }}" role="button"
+        class="secondary">Permalink</a>
+    <a href="{{ url('surge_table', query_={'count': count, 'seed': seed, 'selected': -1}) }}" role="button"
+        class="secondary">Select Random</a>
 </p>
 <table role="grid">
     <thead>
@@ -16,10 +18,12 @@
         {% for surge in surges -%}
         <tr>
             <th scope="row">
-                <a href="{{ url('surge_table', query_={'count': count, 'seed': seed, 'selected': loop.index}) }}">{{loop.index}}</a>
+                <a
+                    href="{{ url('surge_table', query_={'count': count, 'seed': seed, 'selected': loop.index}) }}">{{loop.index}}</a>
             </th>
             <td>
-                {% if loop.index == selected %}<mark>{% endif %}{{ surge[0] }}{% if loop.index == selected %}</mark>{% endif %}
+                {% if loop.index == selected %}<mark>{% endif %}{{ surge[0] }}{% if loop.index == selected %}</mark>{%
+                endif %}
                 <a href="{{ url('surge_info', surge_id=surge[1], query_={'seed': seed}) }}">Permalink</a>
             </td>
         </tr>

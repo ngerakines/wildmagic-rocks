@@ -2,7 +2,8 @@
 {%- block content -%}
 <h3>{{ surge[0] }}</h3>
 <p>
-  <a href="{{ url('surge_info', surge_id=surge[1], query_={'seed': seed}) }}" role="button" class="secondary">Permalink</a> <a
-    href="{{ url('surge_info', surge_id=surge[1]) }}" role="button" class="contrast">Random</a>
+  <a href="{{ url('surge_info', surge_id=surge[1], query_={'seed': seed}) }}" role="button"
+    class="secondary">Permalink</a> <a href="{{ url('surge_info', surge_id=surge[1]) }}" role="button"
+    class="contrast">Random</a>
 </p>
 {%- endblock -%}
