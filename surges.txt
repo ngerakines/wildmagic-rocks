@@ -263,15 +263,15 @@ You have a momentary vision of your own death. If you fail a Wisdom saving roll 
 You have double vision. This gives you disadvantage on ranged attacks (including spell attacks) and Perception checks involving sight. This effect lasts {duration}.
 You have the irresistible urge to scratch an itch in the middle your back, just out of reach, for {duration_minutes}. If you don't scratch it using a back scratcher or some similar device , you must succeed a Constitution saving throw against your spell save DC to cast a spell.
 You hear a ringing in your ears for {duration_minutes}. During this time, casting a spell that requires a verbal component requires a Constitution check against your spell save DC.
-You immediately drop to 0 hit points.
-You immediately drop to 1 hit point.
-You immediately drop to 1 hit point. At the beginning of your next turn, you regain all of the hit points lost to this effect.
-You immediately gain {fives_25} temporary hit points for {duration}.
-You immediately heal {fives_25} hit points.
-You immediately heal 1d{dice_type} hit points.
-You immediately heal 2d{dice_type} hit points.
-You immediately heal 3d{dice_type} hit points.
-You immediately heal 4d{dice_type} hit points.
+You immediately drop to 0 hit points.|health,death
+You immediately drop to 1 hit point.|health
+You immediately drop to 1 hit point. At the beginning of your next turn, you regain all of the hit points lost to this effect.|health
+You immediately gain {fives_25} temporary hit points for {duration}.|health
+You immediately heal {fives_25} hit points.|health
+You immediately heal 1d{dice_type} hit points.|health
+You immediately heal 2d{dice_type} hit points.|health
+You immediately heal 3d{dice_type} hit points.|health
+You immediately heal 4d{dice_type} hit points.|health
 You immediately lose {one_all} unspent sorcery points.
 You immediately take 1d{dice_type} {damage_type} damage. This damage does not bring you below 1 hit point.
 You immediately take 2d{dice_type} {damage_type} damage. This damage does not bring you below 1 hit point.
@@ -298,7 +298,7 @@ You permanently lose the ability to {sense}. This sense can be restored with a s
 You recover 1 expended spell slot of your choice.
 You recover all your expended spell slots.
 You recover your lowest-level expended spell slot.
-You regain 5 hit points per round for {duration_minutes}.
+You regain 5 hit points per round for {duration_minutes}.|health,healing
 You regain all expended sorcery points.
 You see all reflections of yourself as if you were a rotting corpse. A spell such as remove curse can end this effect.
 You stand at the center a circular wall of {element} with a radius of 15 feet. Any creature in any of the spaces covered by this wall must make a Dexterity saving throw against your spell DC or take 5d8 {element} damage. The wall remains for {duration_minutes}.

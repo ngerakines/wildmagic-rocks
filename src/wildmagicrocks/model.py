@@ -1,4 +1,4 @@
-from typing import Any, List, Set, Dict, Optional, Tuple
+from typing import Any, FrozenSet, List, Sequence, Set, Dict, Optional, Tuple
 from string import Formatter
 import numpy
 from fnvhash import fnv1a_64
@@ -125,9 +125,46 @@ def random_target(rng: numpy.random.Generator, targets: List[str] = TARGETS, suf
     return " ".join(target_parts + [suffix[0] if plural else suffix[1]])
 
 
+def split_message_tags(line: str) -> Tuple[str, List[str]]:
+    if "|" not in line:
+        return line, expand_tags(line, [])
+    print(f"line {line}")
+    message, tag_list = line.split("|", 1)
+    print(f"message {message} tag_list {tag_list}")
+    return message, expand_tags(message, tag_list.split(","))
+
+
+def expand_tags(message: str, tags: Sequence[str]) -> FrozenSet[str]:
+    results: Set[str] = set()
+
+    for tag in tags:
+        tag = tag.strip().lower()
+        if len(tag) > 0:
+            results.add(tag)
+
+    if "heals" in message:
+        results.add("healing")
+    if "immediately heal" in message:
+        results.add("healing")
+    if "{duration}" in message:
+        results.add("minutes")
+        results.add("hours")
+        results.add("days")
+    if "{duration_minutes}" in message:
+        results.add("minutes")
+    if "{duration_hours}" in message:
+        results.add("hours")
+    if "{duration_days}" in message:
+        results.add("days")
+    if "item in your possession" in message:
+        results.add("object")
+
+    return frozenset(results)
+
+
 class Surge:
-    def __init__(self, message: str, values: Dict[str, Any] = {}) -> None:
-        self._message = message
+    def __init__(self, message: str) -> None:
+        self._message, self._tags = split_message_tags(message)
         self._message_fields = sorted(list(filter(None, set([v[1] for v in Formatter().parse(self._message)] + ["target_scope_within_feet"]))))
 
     def __hash__(self):
@@ -140,6 +177,20 @@ class Surge:
 
     def __repr__(self) -> str:
         return "{:x}".format(self.__hash__())
+
+    def all_tags(self) -> Set[str]:
+        return frozenset(self._tags)
+
+    def include(self, include_tags: Optional[Set[str]], exclude_tags: Optional[Set[str]]) -> bool:
+        if include_tags is not None:
+            for include_tag in include_tags:
+                if include_tag not in self._tags:
+                    return False
+        if exclude_tags is not None:
+            for exclude_tag in exclude_tags:
+                if exclude_tag in self._tags:
+                    return False
+        return True
 
     def render(self, seed: int) -> str:
         placeholders: Dict[str, str] = {}
@@ -303,28 +354,51 @@ class Surge:
 
 class SurgeIndex:
     def __init__(self, surge_sources: List[str]) -> None:
+        self._available_tags: Set[str] = set()
         self._surges: Dict[str, Surge] = {}
-
         for source in surge_sources:
             with open(source, "r", encoding="utf-8") as source_file:
                 for line in source_file.readlines():
                     surge = Surge(line)
                     self._surges[repr(surge)] = surge
+                    self._available_tags.update(surge.all_tags())
         self._surge_ids: List[str] = list(sorted(set(self._surges.keys())))
 
-    def random_surges(self, seed: int, count: int = 5) -> List[Tuple[str, str]]:
-        if count < 5:
-            count = 20
+    def all_filters(self) -> Set[str]:
+        return self._available_tags
+
+    def random_surges(self, seed: int, count: int = 5, include_tags: Optional[Set[str]] = None, exclude_tags: Optional[Set[str]] = None) -> List[Tuple[str, str]]:
+        if count < 0:
+            count = 1
         if count > 100:
             count = 100
 
+        if include_tags is not None:
+            include_diff = include_tags.difference(self._available_tags)
+            if len(include_diff) > 0:
+                return []
+        if exclude_tags is not None:
+            exclude_diff = exclude_tags.difference(self._available_tags)
+            if len(exclude_diff) > 0:
+                return []
+
+        surge_ids: List[str] = self._surge_ids.copy()
+        if include_tags is not None or exclude_tags is not None:
+            surge_ids.clear()
+            for (surge_id, surge) in self._surges.items():
+                if surge.include(include_tags=include_tags, exclude_tags=exclude_tags):
+                    surge_ids.append(surge_id)
+
+        if len(surge_ids) == 0:
+            return []
+
         rng = numpy.random.default_rng(seed)
-        surges: Set[Surge] = set()
+        surges: List[Surge] = []
         attempts = 0
-        while attempts < count * 2 and len(surges) < count:
+        while len(surges) < count and attempts < count * 2:
             attempts += 1
-            surge_id = rng.choice(self._surge_ids)
-            surges.add(self._surges[surge_id])
+            surge_id = rng.choice(surge_ids)
+            surges.append(self._surges[surge_id])
 
         return [(self.normalize(surge.render(seed)), repr(surge)) for surge in sorted(surges, key=lambda x: hash(x))]
 
