@@ -109,7 +109,9 @@ TARGET_SCOPES: List[str] = [
 ]
 
 
-def random_target(rng: numpy.random.Generator, targets: List[str] = TARGETS, suffix: Optional[Tuple[str, str]] = None) -> str:
+def random_target(
+    rng: numpy.random.Generator, targets: List[str] = TARGETS, suffix: Optional[Tuple[str, str]] = None
+) -> str:
     target, plural = rng.choice(targets)
     if target == "you":
         if suffix is None:
@@ -165,7 +167,9 @@ def expand_tags(message: str, tags: Sequence[str]) -> FrozenSet[str]:
 class Surge:
     def __init__(self, message: str) -> None:
         self._message, self._tags = split_message_tags(message)
-        self._message_fields = sorted(list(filter(None, set([v[1] for v in Formatter().parse(self._message)] + ["target_scope_within_feet"]))))
+        self._message_fields = sorted(
+            list(filter(None, set([v[1] for v in Formatter().parse(self._message)] + ["target_scope_within_feet"])))
+        )
 
     def __hash__(self):
         return fnv1a_64(self._message.encode("utf8"))
@@ -177,6 +181,9 @@ class Surge:
 
     def __repr__(self) -> str:
         return "{:x}".format(self.__hash__())
+
+    def message(self) -> str:
+        return self._message
 
     def all_tags(self) -> Set[str]:
         return frozenset(self._tags)
@@ -215,7 +222,9 @@ class Surge:
             elif message_field == "element":
                 placeholders[message_field] = rng.choice(["fire", "force"])
             elif message_field == "dragon_type":
-                placeholders[message_field] = rng.choice(["black", "blue", "brass", "bronze", "copper", "gold", "green", "red", "silver", "white"])
+                placeholders[message_field] = rng.choice(
+                    ["black", "blue", "brass", "bronze", "copper", "gold", "green", "red", "silver", "white"]
+                )
             elif message_field == "damage_type":
                 placeholders[message_field] = rng.choice(
                     [
@@ -324,7 +333,24 @@ class Surge:
                 )
             elif message_field == "language":
                 placeholders[message_field] = rng.choice(
-                    ["common", "dawrven", "elven", "gian", "gnomish", "goblin", "halfling", "orc", "abyssal", "celestial", "draconic", "deep speech", "infernal", "primordial", "sylvan", "undercommon"]
+                    [
+                        "common",
+                        "dawrven",
+                        "elven",
+                        "gian",
+                        "gnomish",
+                        "goblin",
+                        "halfling",
+                        "orc",
+                        "abyssal",
+                        "celestial",
+                        "draconic",
+                        "deep speech",
+                        "infernal",
+                        "primordial",
+                        "sylvan",
+                        "undercommon",
+                    ]
                 )
             elif message_field == "gain_target":
                 placeholders[message_field] = random_target(rng, suffix=("gains", "gain"))
@@ -345,7 +371,9 @@ class Surge:
             elif message_field == "beneficial_target_gains":
                 placeholders[message_field] = random_target(rng, targets=FRIENDLY_TARGETS, suffix=("gains", "gain"))
             elif message_field == "beneficial_single_target_gains":
-                placeholders[message_field] = random_target(rng, targets=FRIENDLY_SINGLE_TARGETS, suffix=("gains", "gain"))
+                placeholders[message_field] = random_target(
+                    rng, targets=FRIENDLY_SINGLE_TARGETS, suffix=("gains", "gain")
+                )
             elif message_field == "target_scope_within_feet":
                 placeholders[message_field] = rng.choice([10, 20, 30])
 
@@ -367,7 +395,19 @@ class SurgeIndex:
     def all_filters(self) -> Set[str]:
         return self._available_tags
 
-    def random_surges(self, seed: int, count: int = 5, include_tags: Optional[Set[str]] = None, exclude_tags: Optional[Set[str]] = None) -> List[Tuple[str, str]]:
+    def export(self) -> List[Tuple[str, str, Set[str]]]:
+        results: List[Tuple[str, str, Set[str]]] = []
+        for (surge_id, surge) in self._surges.items():
+            results.append((surge_id, surge.message(), surge.all_tags()))
+        return results
+
+    def random_surges(
+        self,
+        seed: int,
+        count: int = 5,
+        include_tags: Optional[Set[str]] = None,
+        exclude_tags: Optional[Set[str]] = None,
+    ) -> List[Tuple[str, str]]:
         if count < 0:
             count = 1
         if count > 100:

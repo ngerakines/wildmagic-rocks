@@ -7,4 +7,5 @@
         class="secondary">Permalink</a>
     <a href="{{ url('surge_info', surge_id=surge[1]) }}" role="button" class="contrast">Random</a>
 </p>
+<p>Filters: {{ filters | join(', ') }}</p>
 {%- endblock -%}

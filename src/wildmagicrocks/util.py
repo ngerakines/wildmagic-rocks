@@ -19,7 +19,9 @@ class RecursiveFormatter(Formatter):
         for format_tuple in self.parse(field_name):
             yield format_tuple
 
-        literal_text = "".join(["" if not conversion else ("!" + conversion), "" if not format_spec else (":" + format_spec), "}"])
+        literal_text = "".join(
+            ["" if not conversion else ("!" + conversion), "" if not format_spec else (":" + format_spec), "}"]
+        )
 
         yield (literal_text, None, None, None)
 
@@ -57,7 +59,9 @@ class _Context(TypedDict, total=False):
 
 
 @jinja2.pass_context
-def url_with_globals(context: _Context, __route_name: str, query_: Optional[Dict[str, str]] = None, **parts: Union[str, int]) -> URL:
+def url_with_globals(
+    context: _Context, __route_name: str, query_: Optional[Dict[str, str]] = None, **parts: Union[str, int]
+) -> URL:
     app = context["app"]
 
     query: Dict[str, str] = {}

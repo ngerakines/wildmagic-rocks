@@ -28,7 +28,9 @@
             <li>(<a href="{{ light_url }}">Light</a> | <a href="{{ dark_url }}">Dark</a>)</li>
         </ul>
     </nav>
-    <main class="container-fluid">{% block content %}{% endblock %}</main>
+    <main class="container-fluid">
+        {% block content %}{% endblock %}
+    </main>
 </body>
 
 </html>

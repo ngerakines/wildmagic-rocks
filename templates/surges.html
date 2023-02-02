@@ -1,0 +1,22 @@
+{%- extends "base.html" -%}
+{%- block content -%}
+<table role="grid">
+    <caption>All Spell Surges</caption>
+    <thead>
+        <tr>
+            <th scope="col">Surge ID</th>
+            <th scope="col">Message</th>
+            <th scope="col">Tags</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for surge in surges -%}
+        <tr>
+            <th scope="row">{{ surge[0] }}</th>
+            <td>{{ surge[1] }}</td>
+            <td>{{ surge[2] | join(', ') }}</td>
+        </tr>
+        {%- endfor %}
+    </tbody>
+</table>
+{%- endblock -%}

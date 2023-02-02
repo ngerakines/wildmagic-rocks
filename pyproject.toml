@@ -33,4 +33,4 @@ exclude = ["wildmagicrocks.tests*"]
 namespaces = false
 
 [tool.black]
-line-length = 210
+line-length = 120

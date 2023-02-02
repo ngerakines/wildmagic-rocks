@@ -1,6 +1,6 @@
 import os
 import logging
-from typing import Any, Dict, Optional, Set, Tuple, Union
+from typing import Any, Dict, List, Optional, Set, Tuple, Union
 import jinja2
 from aiohttp import web
 import aiohttp_jinja2
@@ -58,7 +58,7 @@ def query_globals(request) -> Tuple[Dict[str, Any], Optional[Set[str]], Optional
         "globals": {},
         "light_url": request.url.with_query({"light": "t"}),
         "dark_url": request.url.with_query({"dark": "t"}),
-        "filters": request.config_dict["surge_index"].all_filters(),
+        "filters": sorted(request.config_dict["surge_index"].all_filters()),
     }
     if include_tags is not None:
         result["globals"]["include"] = ",".join(list(sorted(include_tags)))
@@ -88,10 +88,18 @@ def int_or(value: Optional[Union[str, int]], default_value: Optional[int]) -> Op
 async def handle_index(request):
     seed = get_seed(request)
     global_query, include_tags, exclude_tags = query_globals(request)
-    surges = request.config_dict["surge_index"].random_surges(seed, count=1, include_tags=include_tags, exclude_tags=exclude_tags)
+    surges = request.config_dict["surge_index"].random_surges(
+        seed, count=1, include_tags=include_tags, exclude_tags=exclude_tags
+    )
     if len(surges) == 0:
-        return await aiohttp_jinja2.render_template_async("error.html", request, context={"error_message": "No surges match that criteria.", "seed": seed, **global_query})
-    return await aiohttp_jinja2.render_template_async("index.html", request, context={"surge": surges[0], "seed": seed, **global_query})
+        return await aiohttp_jinja2.render_template_async(
+            "error.html",
+            request,
+            context={"error_message": "No surges match that criteria.", "seed": seed, **global_query},
+        )
+    return await aiohttp_jinja2.render_template_async(
+        "index.html", request, context={"surge": surges[0], "seed": seed, **global_query}
+    )
 
 
 async def handle_table(request):
@@ -102,13 +110,29 @@ async def handle_table(request):
     if selected == -1:
         select_rng = numpy.random.default_rng()
         selected = select_rng.integers(1, count)
-        raise web.HTTPFound(request.app.router.get("surge_table").url_for().with_query({"seed": str(seed), "count": count, "selected": str(selected), **global_query["globals"]}))
-    surges = request.config_dict["surge_index"].random_surges(seed, count, include_tags=include_tags, exclude_tags=exclude_tags)
+        raise web.HTTPFound(
+            request.app.router.get("surge_table")
+            .url_for()
+            .with_query({"seed": str(seed), "count": count, "selected": str(selected), **global_query["globals"]})
+        )
+    surges = request.config_dict["surge_index"].random_surges(
+        seed, count, include_tags=include_tags, exclude_tags=exclude_tags
+    )
     if selected > len(surges):
-        return await aiohttp_jinja2.render_template_async("error.html", request, context={"error_message": "Invalid selected surge", "seed": seed, **global_query})
+        return await aiohttp_jinja2.render_template_async(
+            "error.html", request, context={"error_message": "Invalid selected surge", "seed": seed, **global_query}
+        )
     if len(surges) == 0:
-        return await aiohttp_jinja2.render_template_async("error.html", request, context={"error_message": "No surges match that criteria.", "seed": seed, **global_query})
-    return await aiohttp_jinja2.render_template_async("table.html", request, context={"surges": surges, "seed": seed, "selected": selected, "count": count, **global_query})
+        return await aiohttp_jinja2.render_template_async(
+            "error.html",
+            request,
+            context={"error_message": "No surges match that criteria.", "seed": seed, **global_query},
+        )
+    return await aiohttp_jinja2.render_template_async(
+        "table.html",
+        request,
+        context={"surges": surges, "seed": seed, "selected": selected, "count": count, **global_query},
+    )
 
 
 async def handle_surge(request):
@@ -119,7 +143,17 @@ async def handle_surge(request):
     surge = request.config_dict["surge_index"].find_surge(seed, request.match_info["surge_id"], raw=raw)
     if surge is None:
         raise web.HTTPNotFound()
-    return await aiohttp_jinja2.render_template_async("surge.html", request, context={"surge": surge, "seed": seed, **global_query})
+    return await aiohttp_jinja2.render_template_async(
+        "surge.html", request, context={"surge": surge, "seed": seed, **global_query}
+    )
+
+
+async def handle_spell_surges(request):
+    global_query, _, _ = query_globals(request)
+    surges: List[Tuple[str, str, List[str]]] = sorted(request.config_dict["surge_index"].export(), key=lambda x: x[1])
+    return await aiohttp_jinja2.render_template_async(
+        "surges.html", request, context={"surges": surges, **global_query}
+    )
 
 
 async def handle_help(request):
@@ -142,10 +176,13 @@ async def start_web_server():
     app.add_routes([web.get("/", handle_index, name="surge")])
     app.add_routes([web.get("/table", handle_table, name="surge_table")])
     app.add_routes([web.get("/surge/{surge_id}", handle_surge, name="surge_info")])
+    app.add_routes([web.get("/surges", handle_spell_surges, name="surges")])
     app.add_routes([web.get("/help", handle_help, name="help")])
     app.add_routes([web.get("/rules", handle_rules, name="rules")])
 
-    jinja_env = aiohttp_jinja2.setup(app, enable_async=True, loader=jinja2.FileSystemLoader(os.path.join(os.getcwd(), "templates")))
+    jinja_env = aiohttp_jinja2.setup(
+        app, enable_async=True, loader=jinja2.FileSystemLoader(os.path.join(os.getcwd(), "templates"))
+    )
     jinja_env.globals.update(
         {
             "url": url_with_globals,
