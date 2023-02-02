@@ -1,0 +1,88 @@
+{%- extends "base.html" -%}
+{%- block content -%}
+<h1>Standard 5e Rules</h1>
+<p>When playing Dungeons and Dragons 5th Edition, wild magic surges occur when a sorcerer with the wild magic origin
+    casts a 1st level or higher spell. When that happens, the DM can have the player roll a D20 and on a roll of 1, roll
+    on the wild magic spell surge table found in the player's handbook.</p>
+<p>Starting at level 14, sorcerers gain the <strong>Controlled Chaos</strong> ability which allows them to roll twice on
+    the wild magic spell surge table and choose either.</p>
+<p>With these rules, visit the <a href="{{ url('surge_table', query_={'count': 100}) }}">Surge Table Generator with a count of 100</a> and either roll or use the Select Random button.</p>
+<p>Shortcut: <a href="{{ url('surge_table', query_={'count': 100, 'selected': -1}) }}">Generate a table with 100 spell surges and select 1 at random</a></p>
+
+<h1>Variant: Surge at 0</h1>
+<p>An alternative rule is to use a surge at 0 or less. This works by rolling 1D20 and subtract 1 for the spell being
+    cast, 1 for any meta-magic modifiers, and then 0-3 at the DMs discression to represent fatigue, stress, or any other
+    factors that limit your ability to tap into the weave safely.</p>
+
+<p>For example, a level 2 sorcerer with the wild magic origin casts the 1st level spell Magic Missle. The DM gives the
+    player a -1 to the wild magic spell surge roll, so when they roll a 5, the Magic Missile is cast without issue.
+    Later in the game, the player goes to cast Magic Missile again, but this time the DM gives them -3 to the wild magic
+    spell surge roll: 1 for the spell level, 1 for having previously cast a spell recently, and 1 for taking damage in a
+    round of combat recently. When the player rolls a 3, they subtract the modifier, and end up rolling 0 or less, so
+    they must then roll on the spell surge table.</p>
+
+<h1>Variant: Encounter Table</h1>
+
+<p>The spellweave is a mysterious thing and sometimes behaves consistently different because of unknown factors.</p>
+<p>This variant encourages players to have a smaller subset of the wild magic spell surge table that is swapped out over
+    time, location changes, and encounters.</p>
+<p>For example, at the start of the day the DM may generate a spell surge table of 20 and all spell surge rolls use that
+    smaller table for a period of time. Later in the day in-game, an encounter starts and the DM chooses to re-roll the
+    spell surge table and that one is used going forward.</p>
+<p>This variant can be especially useful if there is more than one source of wild magic spell surge rolls either because
+    of player characters, non-player characters, or the environment they are in.</p>
+
+<h1>Variant: Items and Attunement</h1>
+
+<p>This rule variant can be used to make magic item use a little more risky, but easily accessible.</p>
+
+<p>All player and non-player characters can more easily use magical items but at the risk of triggering a spell surge.
+    The risk is decreased with attunement, but the cost in both time and resources to attune to a magical item is also
+    increased. Additionally, magic items can only be attuned to a single creature, so using magical items attuned to
+    other creatures is especially risky.</p>
+
+<table>
+    <caption><strong>Magical item use risk</strong></caption>
+    <thead>
+        <tr>
+            <th scope="col">Item Rarity</th>
+            <th scope="col">Spell Surge Modifier Unattuned</th>
+            <th scope="col">Spell Surge Modifier Attuned to Other</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th scope="row">common</th>
+            <td>-1</td>
+            <td>-2</td>
+        </tr>
+        <tr>
+            <th scope="row">uncommon</th>
+            <td>-2</td>
+            <td>-4</td>
+        </tr>
+        <tr>
+            <th scope="row">rare</th>
+            <td>-3</td>
+            <td>-6</td>
+        </tr>
+        <tr>
+            <th scope="row">legendary</th>
+            <td>-4</td>
+            <td>-8</td>
+        </tr>
+    </tbody>
+</table>
+
+<p>Additionally, attunement can be considered more permanent and creates a bond between the magic item and the wielder.
+    Attunement may not be easily broken by creating short distance or time between the attuned and the item. Destruction
+    of the item may also result in wild magic spell surges if the item was not depleated of charges or magic beforehand.
+</p>
+
+<p>For example, a player finds a wand in the treasure hoard of stolen goods from a defeated band of goblins. The
+    low-level player incorrectly identifies the wand as a Wand of Pyrotechnics and attempts to show off. The DM
+    determines that the wild magic spell surge modifier is -3 because the player did not identify the wand, and the wand
+    was attuned to another character from the whom the wand was stolen from. The player rolls a D20 that results in a 2,
+    and then must roll a wild magic spell surge.</p>
+
+{%- endblock -%}

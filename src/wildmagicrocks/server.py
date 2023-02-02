@@ -87,6 +87,11 @@ async def handle_help(request):
     return await aiohttp_jinja2.render_template_async("help.html", request, context=global_query)
 
 
+async def handle_rules(request):
+    global_query = query_globals(request)
+    return await aiohttp_jinja2.render_template_async("rules.html", request, context=global_query)
+
+
 async def start_web_server():
     app = web.Application()
 
@@ -98,6 +103,7 @@ async def start_web_server():
     app.add_routes([web.get("/table", handle_table, name="surge_table")])
     app.add_routes([web.get("/surge/{surge_id}", handle_surge, name="surge_info")])
     app.add_routes([web.get("/help", handle_help, name="help")])
+    app.add_routes([web.get("/rules", handle_rules, name="rules")])
 
     jinja_env = aiohttp_jinja2.setup(app, enable_async=True, loader=jinja2.FileSystemLoader(os.path.join(os.getcwd(), "templates")))
     jinja_env.globals.update(
