@@ -27,7 +27,7 @@
                 <a href="{{ url('surge_info', surge_id=surge[1], query_={'seed': seed}) }}">Permalink</a>
             </td>
         </tr>
-        {%- endfor %}
+        {%- endfor -%}
     </tbody>
 </table>
 <p>Filters: {{ filters | join(', ') }}</p>

@@ -1,5 +1,6 @@
 {%- extends "base.html" -%}
 {%- block content -%}
+{%- if surge -%}
 <h3>{{ surge[0] }}</h3>
 <p>
     <a href="{{ url('surge') }}" role="button">Generate</a>
@@ -7,5 +8,14 @@
         class="secondary">Permalink</a>
     <a href="{{ url('surge_info', surge_id=surge[1]) }}" role="button" class="contrast">Random</a>
 </p>
-<p>Filters: {{ filters | join(', ') }}</p>
+{%- else -%}
+<p><i>No surges match that criteria.</i></p>
+{%- endif -%}
+<p>
+    Filters: {% for tag_url in tag_urls %}{%- if loop.index > 1 -%}, {%- endif %} {{ tag_url.tag }}
+            [<a title="Include this tag" href="{{- tag_url.included -}}">+</a>/<a href="{{- tag_url.excluded -}}">-</a>/<a href="{{- tag_url.neither -}}">?</a>]
+    {%- endfor -%}
+    <br/>
+    <small>Help: "+" adds the tag to the include query string, "-" adds the tag to the exclude query string, and "?" clears the tag from either</small>
+</p>
 {%- endblock -%}
