@@ -8,7 +8,7 @@ from wildmagicrocks.util import RecursiveFormatter
 
 STATS = ["Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"]
 
-duration_weights = (["minute", "hour", "day"], [0.7, 0.29, 0.01])
+duration_weights = (["minute", "hour", "day"], [30, 15, 1])
 
 duration_values = {
     "minute": ([1, 2, 3, 4, 5, 10, 15, 20, 30], [200, 100, 150, 100, 50, 40, 30, 20, 10]),
@@ -19,7 +19,9 @@ duration_values = {
 
 def random_duration(rng: numpy.random.Generator, duration_type: Optional[str] = None) -> str:
     if duration_type is None:
-        duration_type = rng.choice(duration_weights[0], p=duration_weights[1])
+        weights = numpy.array(duration_weights[1], dtype=numpy.float64)
+        weights /= weights.sum()
+        duration_type = rng.choice(duration_weights[0], p=weights)
 
     values = duration_values[duration_type][0]
 
@@ -34,93 +36,105 @@ def random_duration(rng: numpy.random.Generator, duration_type: Optional[str] = 
     return f"{value} {duration_type}{plurality}"
 
 
-TARGETS: List[Tuple[str, bool]] = [
-    ("you", False),
-    ("you and a random ally", False),
-    ("a random ally", True),
-    ("an ally you choose", True),
-    ("you and an ally you choose", False),
-    ("a random enemy", True),
-    ("an enemy you choose", True),
-    ("a random creature", True),
-    ("a creature you choose", True),
-    ("all allies", False),
-    ("you and your allies", False),
-    ("all enemies", False),
-    ("all creatures", False),
-    ("all other creatures", False),
+TARGETS: List[Tuple[str, bool, int]] = [
+    ("you", False, 100),
+    ("you and a random ally", False, 5),
+    ("a random ally", True, 50),
+    ("an ally you choose", True, 50),
+    ("you and an ally you choose", False, 5),
+    ("a random enemy", True, 50),
+    ("an enemy you choose", True, 25),
+    ("a random creature", True, 25),
+    ("a creature you choose", True, 25),
+    ("all allies", False, 50),
+    ("you and your allies", False, 50),
+    ("all enemies", False, 25),
+    ("all creatures", False, 25),
+    ("all other creatures", False, 25),
 ]
 
-SINGLE_TARGET: List[Tuple[str, bool]] = [
-    ("you", False),
-    ("a random ally", True),
-    ("an ally you choose", True),
-    ("a random enemy", True),
-    ("an enemy you choose", True),
-    ("a random creature", True),
-    ("a creature you choose", True),
+SINGLE_TARGET: List[Tuple[str, bool, int]] = [
+    ("you", False, 1),
+    ("a random ally", True, 1),
+    ("an ally you choose", True, 1),
+    ("a random enemy", True, 1),
+    ("an enemy you choose", True, 1),
+    ("a random creature", True, 1),
+    ("a creature you choose", True, 1),
 ]
 
-OTHER_SINGLE_TARGET: List[Tuple[str, bool]] = [
-    ("a random ally", True),
-    ("an ally you choose", True),
-    ("a random enemy", True),
-    ("an enemy you choose", True),
-    ("a random creature", True),
-    ("a creature you choose", True),
+OTHER_SINGLE_TARGET: List[Tuple[str, bool, int]] = [
+    ("a random ally", True, 1),
+    ("an ally you choose", True, 1),
+    ("a random enemy", True, 1),
+    ("an enemy you choose", True, 1),
+    ("a random creature", True, 1),
+    ("a creature you choose", True, 1),
 ]
 
-OTHER_TARGETS: List[Tuple[str, bool]] = [
-    ("a random ally", True),
-    ("an ally you choose", True),
-    ("a random enemy", True),
-    ("an enemy you choose", True),
-    ("a random creature", True),
-    ("a creature you choose", True),
-    ("all allies", False),
-    ("all enemies", False),
-    ("all other creatures", False),
+OTHER_TARGETS: List[Tuple[str, bool, int]] = [
+    ("a random ally", True, 1),
+    ("an ally you choose", True, 1),
+    ("a random enemy", True, 1),
+    ("an enemy you choose", True, 1),
+    ("a random creature", True, 1),
+    ("a creature you choose", True, 1),
+    ("all allies", False, 1),
+    ("all enemies", False, 1),
+    ("all other creatures", False, 1),
 ]
 
-FRIENDLY_TARGETS: List[Tuple[str, bool]] = [
-    ("you", False),
-    ("a random ally", True),
-    ("an ally you choose", True),
-    ("all allies", False),
-    ("you and your allies", False),
-    ("all friendly creatures", False),
-    ("all other friendly creatures", False),
+FRIENDLY_TARGETS: List[Tuple[str, bool, int]] = [
+    ("you", False, 1),
+    ("a random ally", True, 1),
+    ("an ally you choose", True, 1),
+    ("all allies", False, 1),
+    ("you and your allies", False, 1),
+    ("all friendly creatures", False, 1),
+    ("all other friendly creatures", False, 1),
 ]
 
-FRIENDLY_SINGLE_TARGETS: List[Tuple[str, bool]] = [
-    ("you", False),
-    ("a random ally", True),
-    ("an ally you choose", True),
-    ("all allies", False),
-    ("you and your allies", False),
-    ("all friendly creatures", False),
-    ("all other friendly creatures", False),
+FRIENDLY_SINGLE_TARGETS: List[Tuple[str, bool, int]] = [
+    ("you", False, 1),
+    ("a random ally", True, 1),
+    ("an ally you choose", True, 1),
+    ("all allies", False, 1),
+    ("you and your allies", False, 1),
+    ("all friendly creatures", False, 1),
+    ("all other friendly creatures", False, 1),
 ]
 
-TARGET_SCOPES: List[str] = [
-    "in your line of sight",
-    "within {target_scope_within_feet} feet",
-    "in your line of sight within {target_scope_within_feet} feet",
+TARGET_SCOPES: List[Tuple[str, int]] = [
+    ("", 4),
+    ("in your line of sight", 3),
+    ("within {target_scope_within_feet} feet", 2),
+    ("in your line of sight within {target_scope_within_feet} feet", 1),
 ]
 
 
 def random_target(
-    rng: numpy.random.Generator, targets: List[str] = TARGETS, suffix: Optional[Tuple[str, str]] = None
+    rng: numpy.random.Generator,
+    targets: List[Tuple[str, bool, int]] = TARGETS,
+    suffix: Optional[Tuple[str, str]] = None,
 ) -> str:
-    target, plural = rng.choice(targets)
+    target_weights = numpy.array([weight for (_, _, weight) in targets], dtype=numpy.float64)
+    target_weights /= target_weights.sum()
+    target, plural = rng.choice(
+        [(target_value, target_plural) for (target_value, target_plural, _) in targets], p=target_weights
+    )
+
     if target == "you":
         if suffix is None:
             return target
         return f"{target} {suffix[1]}"
 
-    target_scope = rng.choice(TARGET_SCOPES)
+    target_scope_weights = numpy.array([weight for (_, weight) in TARGET_SCOPES], dtype=numpy.float64)
+    target_scope_weights /= target_scope_weights.sum()
+    target_scope = rng.choice([target_scope_value for (target_scope_value, _) in TARGET_SCOPES], p=target_scope_weights)
 
-    target_parts = [target, target_scope]
+    target_parts = [target]
+    if len(str(target_scope)) > 0:
+        target_parts.append(target_scope)
     if suffix is None:
         return " ".join(target_parts)
 
@@ -130,9 +144,7 @@ def random_target(
 def split_message_tags(line: str) -> Tuple[str, List[str]]:
     if "|" not in line:
         return line, expand_tags(line, [])
-    print(f"line {line}")
     message, tag_list = line.split("|", 1)
-    print(f"message {message} tag_list {tag_list}")
     return message, expand_tags(message, tag_list.split(","))
 
 

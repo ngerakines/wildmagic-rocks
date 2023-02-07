@@ -1,6 +1,6 @@
 {%- extends "base.html" -%}
 {%- block content -%}
-<h1>Help!</h1>
+<h1>What is this?</h1>
 <p><a href="{{ url('surge') }}">Wild Magic Rocks!</a> is a wild magic surge generator for table top role playing games.
 </p>
 <h2>How do I use it?</h2>
@@ -11,7 +11,6 @@
     <li>You can use the <a href="{{ url('surge_table') }}">Surge Table Generator</a> to generate a table of wild magic
         surges to use in encounters.</li>
 </ul>
-
 <h2>What are the 'Permalink' buttons?</h2>
 <p>On <a href="{{ url('surge') }}">Surge Generator</a> page, the <strong>Permalink</strong> button links to a surge page
     that will always show that specific surge. The <strong>seed</strong> query string parameter can be provided to
@@ -19,24 +18,19 @@
 <p>Similarly, on the <a href="{{ url('surge_table') }}">Surge Table Generator</a> page, the <strong>Permalink</strong>
     button links to a surge table that can be shared and refreshed with the same content given the <strong>seed</strong>
     query string parameter.</p>
-
 <h2>What is the <strong>Select</strong> button on the Surge Table Generator page</h2>
 <p>The select button links to a <strong>Permalink</strong> url for that table but with the <strong>selected</strong>
     query string parameter set to <kbd>-1</kbd>. When you go to that page, the table will redirect to a selected table
     item and set the <strong>selected</strong> query string parameter to the selected number.</p>
-
 <h2>Can I change the number of surges on with Surge Table Generator?</h2>
 <p>By default, <strong>20</strong> surges are generated. If you click on the <strong>Permalink</strong> button on the
     Surge Table Generator, you can see the <strong>count</strong> query string parameter.</p>
 <p>The table will generate no fewer than 5 and no more than 100 surges.</p>
-
 <h2>How can I see the raw surge text before dynamic values are filled?</h2>
 <p>Click on a surge <strong>Permalink</strong> and then append the <kbd>&raw=true</kbd> query string parameter</p>
-
 <h2>Is there a list of all of the spell surges?</h2>
 <p>Check out <a href="{{ url('surges') }}">/surges</a>. The same list can also be found on GitHub at <a
-    href="https://github.com/ngerakines/wildmagic-rocks">github.com/ngerakines/wildmagic-rocks</a></p>
-
+        href="https://github.com/ngerakines/wildmagic-rocks">github.com/ngerakines/wildmagic-rocks</a></p>
 <h2>What are filters?</h2>
 <p>Some spell surges are tagged and those tags can be used to include or exclude them from either the <a
         href="{{ url('surge') }}">Surge Generator</a> or <a href="{{ url('surge_table') }}">Surge Table Generator</a> by
@@ -44,42 +38,33 @@
 </p>
 <h3>Examples</h3>
 <ul>
-    <li>{{ url('surge', query_={'include': 'healing'}) }} would limit surges to healing surges</li>
-    <li>{{ url('surge', query_={'exclude': 'death'}) }} would include all surges except death surges</li>
-    <li>{{ url('surge', query_={'exclude': 'planar'}) }} would include all surges except death surges</li>
+    <li>{{ url('surge', query_={'include': 'health'}) }} would limit surges to healing surges</li>
+    <li>{{ url('surge', query_={'exclude': 'death,planar'}) }} would include all surges except death and planar surges
+    </li>
 </ul>
-
+<h3>Filters</h3>
 <dl>
     <dt>death</dt>
     <dd>Can result in creature death</dd>
     <dt>health</dt>
-    <dd>Health changing effects</dd>
+    <dd>Surges that involve changing effects</dd>
     <dt>object</dt>
-    <dd>Surges that affect objects</dd>
-  </dl> 
-<ul>
-    {%- for tag_url in tag_urls -%}
-    <li>
-        {{ tag_url.tag }}
-        <a title="Include this tag" href="{{- tag_url.included -}}">include</a>
-        <a href="{{- tag_url.excluded -}}">exclude</a>
-        <a href="{{- tag_url.neither -}}">clear</a>
-    </li>
-    {%- endfor -%}
-</ul>
-
+    <dd>Surges that involve objects</dd>
+    <dt>planar</dt>
+    <dd>Surges that involve planar travel</dd>
+    <dt>movement</dt>
+    <dd>Surges that involve movement</dd>
+</dl>
 <h2>Is there a dark mode?</h2>
 <p>Yes! This site uses <a href="https://picocss.com/">Pico.css</a> which suports both <a
         href="{{ url('surge', query_={'light': 't'}) }}">light</a> and <a
         href="{{ url('surge', query_={'dar': 't'}) }}">dark</a> modes. Because this website doesn't use any javascript,
     cookies, or browser storage, when you add either <kbd>light</kbd> or <kbd>dark</kbd> to the query string parameters,
     that value will be appended to any links generated through the site.</p>
-
 <h2>I found a bug!</h2>
 <p>Go to <a href="https://github.com/ngerakines/wildmagic-rocks/issues">github.com/ngerakines/wildmagic-rocks/issues</a>
     and create a new issue. Please describe what you encountered, what you did to get there, and what you expect to
     happen.</p>
-
 <h2>I'd like to contribute!</h2>
 <p>Fantastic! There are lots of ways to contribute:</p>
 <ul>
@@ -92,7 +77,6 @@
 <p>To get started, go to <a
         href="https://github.com/ngerakines/wildmagic-rocks">github.com/ngerakines/wildmagic-rocks</a> start looking
     through open issues, pull-requests, and the codebase.</p>
-
 <h2>What else should I know?</h2>
 <ul>
     <li>This is an act of love and made in Ohio by <a href="https://thegem.city/@nick">thegem.city/@nick</a>.</li>
