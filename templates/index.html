@@ -11,11 +11,4 @@
 {%- else -%}
 <p><i>No surges match that criteria.</i></p>
 {%- endif -%}
-<p>
-    Filters: {% for tag_url in tag_urls %}{%- if loop.index > 1 -%}, {%- endif %} {{ tag_url.tag }}
-            [<a title="Include this tag" href="{{- tag_url.included -}}">+</a>/<a href="{{- tag_url.excluded -}}">-</a>/<a href="{{- tag_url.neither -}}">?</a>]
-    {%- endfor -%}
-    <br/>
-    <small>Help: "+" adds the tag to the include query string, "-" adds the tag to the exclude query string, and "?" clears the tag from either</small>
-</p>
 {%- endblock -%}

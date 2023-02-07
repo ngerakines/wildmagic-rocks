@@ -39,9 +39,34 @@
 
 <h2>What are filters?</h2>
 <p>Some spell surges are tagged and those tags can be used to include or exclude them from either the <a
-        href="{{ url('surge') }}">Surge Generator</a> or a href="{{ url('surge_table') }}">Surge Table Generator</a> by
+        href="{{ url('surge') }}">Surge Generator</a> or <a href="{{ url('surge_table') }}">Surge Table Generator</a> by
     using the <kbd>include</kbd> or <kbd>exclude</kbd> query string parameter.
 </p>
+<h3>Examples</h3>
+<ul>
+    <li>{{ url('surge', query_={'include': 'healing'}) }} would limit surges to healing surges</li>
+    <li>{{ url('surge', query_={'exclude': 'death'}) }} would include all surges except death surges</li>
+    <li>{{ url('surge', query_={'exclude': 'planar'}) }} would include all surges except death surges</li>
+</ul>
+
+<dl>
+    <dt>death</dt>
+    <dd>Can result in creature death</dd>
+    <dt>health</dt>
+    <dd>Health changing effects</dd>
+    <dt>object</dt>
+    <dd>Surges that affect objects</dd>
+  </dl> 
+<ul>
+    {%- for tag_url in tag_urls -%}
+    <li>
+        {{ tag_url.tag }}
+        <a title="Include this tag" href="{{- tag_url.included -}}">include</a>
+        <a href="{{- tag_url.excluded -}}">exclude</a>
+        <a href="{{- tag_url.neither -}}">clear</a>
+    </li>
+    {%- endfor -%}
+</ul>
 
 <h2>Is there a dark mode?</h2>
 <p>Yes! This site uses <a href="https://picocss.com/">Pico.css</a> which suports both <a

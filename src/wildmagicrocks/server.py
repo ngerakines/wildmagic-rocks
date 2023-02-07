@@ -121,22 +121,20 @@ def int_or(value: Optional[Union[str, int]], default_value: Optional[int]) -> Op
 async def handle_index(request):
     seed = get_seed(request)
     global_query, include_tags, exclude_tags = query_globals(request)
-    tag_urls = filter_urls(request, include_tags=include_tags, exclude_tags=exclude_tags)
-    print(tag_urls)
     surges = request.config_dict["surge_index"].random_surges(
         seed, count=1, include_tags=include_tags, exclude_tags=exclude_tags
     )
     if len(surges) == 0:
-        # return await aiohttp_jinja2.render_template_async(
-        #     "error.html",
-        #     request,
-        #     context={"error_message": "No surges match that criteria.", "seed": seed, **global_query},
-        # )
         return await aiohttp_jinja2.render_template_async(
-            "index.html", request, context={"seed": seed, "tag_urls": tag_urls, **global_query}
+            "error.html",
+            request,
+            context={"error_message": "No surges match that criteria.", "seed": seed, **global_query},
         )
+        # return await aiohttp_jinja2.render_template_async(
+        #     "index.html", request, context={"seed": seed, "tag_urls": tag_urls, **global_query}
+        # )
     return await aiohttp_jinja2.render_template_async(
-        "index.html", request, context={"surge": surges[0], "seed": seed, "tag_urls": tag_urls, **global_query}
+        "index.html", request, context={"surge": surges[0], "seed": seed, **global_query}
     )
 
 
@@ -195,8 +193,11 @@ async def handle_spell_surges(request):
 
 
 async def handle_help(request):
-    global_query, _, _ = query_globals(request)
-    return await aiohttp_jinja2.render_template_async("help.html", request, context=global_query)
+    global_query, include_tags, exclude_tags = query_globals(request)
+    tag_urls = filter_urls(request, include_tags=include_tags, exclude_tags=exclude_tags)
+    return await aiohttp_jinja2.render_template_async(
+        "help.html", request, context={"tag_urls": tag_urls, **global_query}
+    )
 
 
 async def handle_rules(request):
